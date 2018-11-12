@@ -32,7 +32,20 @@ export default class ListItemDueDate extends React.Component {
         let text = '';
         switch (displayType) {
             case DISPLAY_TYPE.DATE:
-                text = dueMoment.format('Do MMM');
+                if (dueMoment.second() === 59) {
+                    text = dueMoment.format('Do MMM');
+                } else {
+                    // TODO: Use user's preferred time format
+                    // let val = user.time_format;
+                    let val = 0;
+                    if (val === 0) {
+                        text = dueMoment.format('Do MMM HH:mm');
+                    } else if (val === 1) {
+                        text = dueMoment.format('Do MMM h:mm A');
+                    } else {
+                        console.log("That's weird, Todoist, you promised it'd be 0 or 1");
+                    }
+                }
                 break;
             case DISPLAY_TYPE.RELATIVE:
                 text = dueMoment.fromNow();
