@@ -90,8 +90,14 @@ const todoistPersistenceMiddleware = store => next => action => {
 
         case types.UPDATE_LIST_ITEM:
             function persistContentChange() {
-                const { item, text } = action.payload;
-                const updatedItem = { id: item.id, content: text };
+                const { item, text, date_string } = action.payload;
+                let updatedItem;
+                if (date_string === undefined) {
+                    updatedItem = { id: item.id, content: text };
+                } else {
+                    // We still POST if it is empty string
+                    updatedItem = { id: item.id, content: text, date_string: date_string };
+                }
                 Todoist.updateItem(token, updatedItem);
             }
             persistContentChange();
