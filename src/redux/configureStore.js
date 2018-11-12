@@ -25,6 +25,7 @@ const sentryMiddleware = store => next => action => {
             Raven.setUserContext({
                 userId: user.id,
                 userTz: user.tz_info.timezone,
+                userTimeFormat: user.time_format,
                 premium: user.is_premium,
             });
             break;
