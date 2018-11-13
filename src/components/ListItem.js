@@ -131,12 +131,12 @@ class ListItem extends React.Component {
 
     updateItem = () => {
         const { item, onUpdate } = this.props;
-        const { rawText } = this.state;
+        const { rawText, dateString } = this.state;
         // Only update if the value actually changed. Note that this may
         // need to be changed if we allow for changing other properties of
         // a task (like the project) in the future.
-        if (item.text !== rawText) {
-            onUpdate(item, rawText);
+        if (item.text !== rawText || item.date_string !== dateString) {
+            onUpdate(item, rawText, dateString);
         }
         this.setState({
             previousRawText: rawText,

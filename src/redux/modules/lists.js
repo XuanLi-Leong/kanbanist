@@ -93,7 +93,7 @@ export const actions = {
     deleteList: list => ({ type: types.DELETE_LIST, payload: { list } }),
     addListItem: (list, item, onHidden) => ({ type: types.ADD_LIST_ITEM, payload: { list, item, onHidden } }),
     moveToList: (toList, item, fromList) => ({ type: types.MOVE_TO_LIST, payload: { toList, item, fromList } }),
-    updateListItem: (item, text) => ({ type: types.UPDATE_LIST_ITEM, payload: { item, text } }),
+    updateListItem: (item, text, dateString) => ({ type: types.UPDATE_LIST_ITEM, payload: { item, text, dateString } }),
     completeListItem: item => ({ type: types.COMPLETE_LIST_ITEM, payload: { item } }),
     fetchLists: () => (dispatch, getState) => {
         const state = getState();
@@ -275,8 +275,10 @@ function moveToList(state, action) {
 }
 
 function updateListItem(state, action) {
-    const { item, text } = action.payload;
-    const updatedLists = state.lists.map(itemList => itemList.updateItem(item, item.updateWith({ text })));
+    const { item, text, dateString } = action.payload;
+    const updatedLists = state.lists.map(itemList =>
+        itemList.updateItem(item, item.updateWith({ text, date_string: dateString }))
+    );
     return { ...state, lists: updatedLists };
 }
 
