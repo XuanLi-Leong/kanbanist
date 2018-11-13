@@ -23,6 +23,7 @@ export default class ListItemDueDate extends React.Component {
     };
 
     render() {
+        const { timeFormat } = this.props;
         const { dueMoment, displayType } = this.state;
 
         if (dueMoment === null) {
@@ -33,17 +34,13 @@ export default class ListItemDueDate extends React.Component {
         switch (displayType) {
             case DISPLAY_TYPE.DATE:
                 if (dueMoment.second() === 59) {
+                    // For all day task, the time part will be set as xx:xx:59
                     text = dueMoment.format('Do MMM');
                 } else {
-                    // TODO: Use user's preferred time format
-                    // let val = user.time_format;
-                    let val = 0;
-                    if (val === 0) {
+                    if (timeFormat === 0) {
                         text = dueMoment.format('Do MMM HH:mm');
-                    } else if (val === 1) {
-                        text = dueMoment.format('Do MMM h:mm A');
                     } else {
-                        console.log("That's weird, Todoist, you promised it'd be 0 or 1");
+                        text = dueMoment.format('Do MMM h:mm A');
                     }
                 }
                 break;

@@ -1,4 +1,6 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import flow from 'lodash/flow';
 import { EditableText, Button, Checkbox, Icon, Intent } from '@blueprintjs/core';
 import '../../node_modules/@blueprintjs/core/dist/blueprint.css';
 import { DragSource } from 'react-dnd';
@@ -35,6 +37,7 @@ class ListItem extends React.Component {
             previousRawText: props.item.text,
             rawText: props.item.text,
             formattedText: this.format(props.item.text),
+            dateString: props.item.date_string,
             checked: props.checked,
         };
     }
@@ -164,7 +167,7 @@ class ListItem extends React.Component {
     }
 
     render() {
-        const { connectDragSource, isDragging, item, collaborator } = this.props;
+        const { connectDragSource, isDragging, item, timeFormat, collaborator } = this.props;
         const { checked, rawText, formattedText, isEditing, isActuallyEditing } = this.state;
 
         const isOutlook = isOutlookText(rawText);
@@ -232,7 +235,7 @@ class ListItem extends React.Component {
                                 {isRecurring ? (
                                     <Icon className="ListItem-recurring-icon" iconName="exchange" iconSize={16} />
                                 ) : null}
-                                <ListItemDueDate dueDate={item.due_date_utc} />
+                                <ListItemDueDate dueDate={item.due_date_utc} timeFormat={timeFormat} />
                                 {collaborator ? (
                                     collaborator.image_id ? (
                                         <img
@@ -269,7 +272,14 @@ const listItemSource = {
     },
 };
 
-export default DragSource(DragAndDropTypes.LIST_ITEM, listItemSource, (connect, monitor) => ({
-    isDragging: monitor.isDragging(),
-    connectDragSource: connect.dragSource(),
-}))(ListItem);
+const mapStateToProps = state => {
+    return { timeFormat: state.user.user.time_format };
+};
+
+export default flow(
+    DragSource(DragAndDropTypes.LIST_ITEM, listItemSource, (connect, monitor) => ({
+        isDragging: monitor.isDragging(),
+        connectDragSource: connect.dragSource(),
+    })),
+    connect(mapStateToProps)
+)(ListItem);
