@@ -218,7 +218,7 @@ function addListItem(state, action) {
     const projectId = defaultProjectId ? defaultProjectId : inboxProject.id;
     if (state.filteredProjects.find(project => project.id === projectId)) {
         onHidden(HIDDEN_REASON.PROJECT_FILTERED);
-    } else if (state.filterDueDate.get('startDate', false)) {
+    } else if (state.filterDueDate.get('startDate', false) || state.namedFilter !== null) {
         // this will if there is any due date filter at all - even if quick-add is about to add a due date that means
         // the item IS visible
         onHidden(HIDDEN_REASON.DUE_DATE_FILTERED);
