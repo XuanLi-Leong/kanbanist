@@ -1,3 +1,4 @@
+import Raven from 'raven-js';
 import fetch from 'isomorphic-fetch';
 import URLSearchParams from 'url-search-params';
 
@@ -73,7 +74,8 @@ export default class Todoist {
     }
 
     static updateItem(apiToken, updatedItem) {
-        return Todoist.sendCommand(apiToken, Todoist.createCommand('item_update', updatedItem));
+        const command = Todoist.createCommand('item_update', updatedItem);
+        return Todoist.sendCommand(apiToken, command).then(response => ({ response: response, uuid: command.uuid }));
     }
 
     static addItem(apiToken, newItem, temp_id) {

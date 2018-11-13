@@ -1,4 +1,7 @@
 import Todoist from '../../todoist-client/Todoist';
+import Raven from 'raven-js';
+import { BoardToaster } from '../../components/Toaster';
+import { Intent } from '@blueprintjs/core';
 import { types, actions, isListBacklog } from '../modules/lists';
 import { types as karmaTypes } from '../modules/karma';
 import List from '../../core/List';
@@ -93,7 +96,21 @@ const todoistPersistenceMiddleware = store => next => action => {
             function persistContentChange() {
                 const { item, text, dateString } = action.payload;
                 const updatedItem = { id: item.id, content: text, date_string: dateString };
-                Todoist.updateItem(token, updatedItem).then(() => store.dispatch(actions.fetchLists()));
+                Todoist.updateItem(token, updatedItem)
+                    .then(({ response, uuid }) => {
+                        const err = response.sync_status[uuid].error;
+                        if (err !== undefined) {
+                            Raven.captureException(err);
+                            console.log('Failed to update list item: ' + err);
+                            BoardToaster.show({
+                                message: 'Failed to update list item: ' + err,
+                                intent: Intent.WARNING,
+                                timeout: 5000,
+                            });
+                            // store.dispatch(actions.updateFailure(err || 'Failed to update list item'));
+                        }
+                    })
+                    .then(() => store.dispatch(actions.fetchLists()));
             }
             persistContentChange();
             break;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { AnchorButton, Icon, Intent } from '@blueprintjs/core';
+import { AnchorButton, Icon, Intent, Tag } from '@blueprintjs/core';
 
 class KarmaDisplay extends Component {
     changeVacationMode = () => {
@@ -17,7 +17,7 @@ class KarmaDisplay extends Component {
     };
 
     getVacation = () => {
-        return this.props.karma_vacation === 1 ? 'briefcase' : 'circle';
+        return this.props.karma_vacation === 1 ? 'path-search' : 'take-action';
     };
 
     getVacationTitle = () => {
@@ -28,20 +28,17 @@ class KarmaDisplay extends Component {
         return (
             <div className="Karma">
                 <AnchorButton
-                    className="light-text"
-                    iconName={this.getTrend()}
-                    onClick={() => console.log('Pressed karma')}
-                    intent={Intent.WARNING}
-                    title={this.getTrendTitle()}
-                />
-                <AnchorButton
-                    className="light-text"
+                    className="light-text header-right"
                     iconName={this.getVacation()}
                     onClick={this.changeVacationMode}
                     intent={Intent.WARNING}
                     title={this.getVacationTitle()}
                 />
-                Karma: {this.props.karma}
+                <Tag iconName={this.getTrend()} className="pt-large pt-minimal header-right">
+                    <Icon className="header-right" iconName={this.getTrend()} title={this.getTrendTitle()} />
+                    Karma: {this.props.karma}
+                </Tag>
+                <span className="pt-navbar-divider" />
             </div>
         );
     }

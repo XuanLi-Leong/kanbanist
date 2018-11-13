@@ -86,7 +86,7 @@ class List extends React.Component {
                 canOutsideClickCancel={true}
                 cancelButtonText="Cancel"
                 confirmButtonText="Delete list"
-                icon="trash"
+                iconName="trash"
                 intent={Intent.DANGER}
                 isOpen={isDeleteConfirmationOpen}
                 onCancel={this.handleCancelDelete}

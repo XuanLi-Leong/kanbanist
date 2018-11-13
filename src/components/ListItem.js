@@ -96,7 +96,6 @@ class ListItem extends React.Component {
     };
 
     handleDueDateChange = updatedText => {
-        const { dateString } = this.state;
         const isNewLine = updatedText.indexOf('\n') >= 0;
         if (isNewLine) {
             this.updateItem();
@@ -183,15 +182,7 @@ class ListItem extends React.Component {
 
     render() {
         const { connectDragSource, isDragging, item, timeFormat, collaborator } = this.props;
-        const {
-            checked,
-            dateString,
-            dateStringTemp,
-            rawText,
-            formattedText,
-            isEditing,
-            isActuallyEditing,
-        } = this.state;
+        const { checked, dateString, rawText, formattedText, isEditing, isActuallyEditing } = this.state;
 
         const isOutlook = isOutlookText(rawText);
 
