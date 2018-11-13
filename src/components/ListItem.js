@@ -1,4 +1,6 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import flow from 'lodash/flow';
 import { EditableText, Button, Checkbox, Icon, Intent } from '@blueprintjs/core';
 import '../../node_modules/@blueprintjs/core/dist/blueprint.css';
 import { DragSource } from 'react-dnd';
@@ -35,6 +37,8 @@ class ListItem extends React.Component {
             previousRawText: props.item.text,
             rawText: props.item.text,
             formattedText: this.format(props.item.text),
+            previousDateString: props.item.date_string, // TODO we'd have to refetch the date_string, isRecurring, due_date_utc from Todoist because they handle parsing. due_date_utc lets us render the date/time correctly
+            dateString: props.item.date_string,
             checked: props.checked,
         };
     }
@@ -79,7 +83,7 @@ class ListItem extends React.Component {
         return `${beggining},${content}]]`;
     };
 
-    handleChange = updatedText => {
+    handleTextChange = updatedText => {
         const { rawText } = this.state;
         const isOutlook = isOutlookText(rawText);
         const isNewLine = updatedText.indexOf('\n') >= 0;
@@ -88,6 +92,16 @@ class ListItem extends React.Component {
         } else {
             const newRawText = isOutlook ? this.updateOutlookItem(rawText, updatedText) : updatedText;
             this.setState({ rawText: newRawText });
+        }
+    };
+
+    handleDueDateChange = updatedText => {
+        const { dateString } = this.state;
+        const isNewLine = updatedText.indexOf('\n') >= 0;
+        if (isNewLine) {
+            this.updateItem();
+        } else {
+            this.setState({ dateString: updatedText });
         }
     };
 
@@ -121,22 +135,26 @@ class ListItem extends React.Component {
         this.setState({
             formattedText: this.format(this.state.previousRawText),
             rawText: this.state.previousRawText,
+            dateString: this.state.previousDateString,
             isEditing: false,
             isActuallyEditing: false,
         });
     };
 
     updateItem = () => {
+        // TODO we'd have to refetch the date_string, isRecurring, due_date_utc from Todoist because they handle parsing. due_date_utc lets us render the date/time correctly
         const { item, onUpdate } = this.props;
-        const { rawText } = this.state;
+        const { rawText, dateString } = this.state;
         // Only update if the value actually changed. Note that this may
         // need to be changed if we allow for changing other properties of
         // a task (like the project) in the future.
-        if (item.text !== rawText) {
-            onUpdate(item, rawText);
+        if (item.text !== rawText || item.date_string !== dateString) {
+            onUpdate(item, rawText, dateString);
         }
         this.setState({
             previousRawText: rawText,
+            previousDateString: dateString,
+            dateStringTemp: dateString,
             isEditing: false,
             isActuallyEditing: false,
             formattedText: this.format(rawText),
@@ -164,8 +182,16 @@ class ListItem extends React.Component {
     }
 
     render() {
-        const { connectDragSource, isDragging, item, collaborator } = this.props;
-        const { checked, rawText, formattedText, isEditing, isActuallyEditing } = this.state;
+        const { connectDragSource, isDragging, item, timeFormat, collaborator } = this.props;
+        const {
+            checked,
+            dateString,
+            dateStringTemp,
+            rawText,
+            formattedText,
+            isEditing,
+            isActuallyEditing,
+        } = this.state;
 
         const isOutlook = isOutlookText(rawText);
 
@@ -196,8 +222,7 @@ class ListItem extends React.Component {
                                 className="ListItem-text"
                                 multiline
                                 value={!isOutlook ? rawText : this.getOutlookContent(rawText)}
-                                isEditing={isActuallyEditing}
-                                onChange={this.handleChange}
+                                onChange={this.handleTextChange}
                                 disabled={checked}
                             />
                         ) : (
@@ -217,14 +242,26 @@ class ListItem extends React.Component {
                     </div>
                     <div className="ListItem-inner-bottom">
                         {isEditing ? (
-                            <div className="ListItem-edit-buttons">
-                                <Button
-                                    className="ListItem-edit-button"
-                                    text="Save"
-                                    intent={Intent.SUCCESS}
-                                    onClick={this.updateItem}
+                            <div>
+                                <EditableText
+                                    className="ListItem-project-duedate"
+                                    value={dateString}
+                                    onChange={this.handleDueDateChange}
+                                    disabled={checked}
                                 />
-                                <Button className="ListItem-edit-button" text="Cancel" onClick={this.handleCancel} />
+                                <div className="ListItem-edit-buttons">
+                                    <Button
+                                        className="ListItem-edit-button"
+                                        text="Save"
+                                        intent={Intent.SUCCESS}
+                                        onClick={this.updateItem}
+                                    />
+                                    <Button
+                                        className="ListItem-edit-button"
+                                        text="Cancel"
+                                        onClick={this.handleCancel}
+                                    />
+                                </div>
                             </div>
                         ) : (
                             <div className="non-edit-text">
@@ -232,7 +269,7 @@ class ListItem extends React.Component {
                                 {isRecurring ? (
                                     <Icon className="ListItem-recurring-icon" iconName="exchange" iconSize={16} />
                                 ) : null}
-                                <ListItemDueDate dueDate={item.due_date_utc} />
+                                <ListItemDueDate dueDate={item.due_date_utc} timeFormat={timeFormat} />
                                 {collaborator ? (
                                     collaborator.image_id ? (
                                         <img
@@ -269,7 +306,14 @@ const listItemSource = {
     },
 };
 
-export default DragSource(DragAndDropTypes.LIST_ITEM, listItemSource, (connect, monitor) => ({
-    isDragging: monitor.isDragging(),
-    connectDragSource: connect.dragSource(),
-}))(ListItem);
+const mapStateToProps = state => {
+    return { timeFormat: state.user.user.time_format };
+};
+
+export default flow(
+    DragSource(DragAndDropTypes.LIST_ITEM, listItemSource, (connect, monitor) => ({
+        isDragging: monitor.isDragging(),
+        connectDragSource: connect.dragSource(),
+    })),
+    connect(mapStateToProps)
+)(ListItem);

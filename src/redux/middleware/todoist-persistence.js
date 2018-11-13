@@ -90,9 +90,9 @@ const todoistPersistenceMiddleware = store => next => action => {
 
         case types.UPDATE_LIST_ITEM:
             function persistContentChange() {
-                const { item, text } = action.payload;
-                const updatedItem = { id: item.id, content: text };
-                Todoist.updateItem(token, updatedItem);
+                const { item, text, dateString } = action.payload;
+                const updatedItem = { id: item.id, content: text, date_string: dateString };
+                Todoist.updateItem(token, updatedItem).then(() => store.dispatch(actions.fetchLists()));
             }
             persistContentChange();
             break;
