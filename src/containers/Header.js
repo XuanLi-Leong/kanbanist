@@ -4,6 +4,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { AnchorButton, Intent, Spinner } from '@blueprintjs/core';
 import KarmaDisplay from '../components/KarmaDisplay';
 
+import { actions as karmaActions } from '../redux/modules/karma';
 import { actions as userActions } from '../redux/modules/user';
 import { actions as listsActions } from '../redux/modules/lists';
 import { actions as uiActions } from '../redux/modules/ui';
@@ -14,7 +15,7 @@ class Header extends React.Component {
 
         const { loggedIn, token } = user;
 
-        const karmaComponent = <KarmaDisplay />;
+        const karmaComponent = <KarmaDisplay updateVacationMode={this.props.updateVacationMode} />;
 
         const logoutButton = (
             <AnchorButton
@@ -116,6 +117,9 @@ const mapDispatchToProps = dispatch => {
         },
         toggleBacklog: () => {
             dispatch(uiActions.toggleBacklog());
+        },
+        updateVacationMode: mode => {
+            dispatch(karmaActions.updateVacationMode(mode));
         },
     };
 };
