@@ -1,3 +1,4 @@
+// Karma component in the header
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { AnchorButton, Icon, Intent, Tag } from '@blueprintjs/core';
