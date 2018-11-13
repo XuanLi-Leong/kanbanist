@@ -6,6 +6,7 @@ import URLSearchParams from 'url-search-params';
  */
 
 const SYNC_API_URL = 'https://todoist.com/API/v7/sync';
+const GET_STATS_URL = 'https://todoist.com/API/v7/completed/get_stats';
 const QUICK_ADD_API_URL = 'https://todoist.com/API/v7/quick/add';
 
 export default class Todoist {
@@ -59,6 +60,16 @@ export default class Todoist {
 
                 return { labels, items, projects, collaborators };
             });
+    }
+
+    static getStats(apiToken) {
+        return fetch(`${GET_STATS_URL}?token=${apiToken}`)
+            .then(res => res.json())
+            .then(productivityData => productivityData);
+    }
+
+    static updateVacationMode(apiToken, vacationMode) {
+        return Todoist.sendCommand(apiToken, Todoist.createCommand('update_goals', vacationMode));
     }
 
     static updateItem(apiToken, updatedItem) {

@@ -9,6 +9,7 @@ import { routerReducer, routerMiddleware } from 'react-router-redux';
 import createHistory from 'history/createBrowserHistory';
 
 // Redux modules.
+import * as karma from './modules/karma';
 import * as lists from './modules/lists';
 import * as user from './modules/user';
 import * as ui from './modules/ui';
@@ -38,6 +39,7 @@ const sentryMiddleware = store => next => action => {
 
 export const configureStore = () => {
     const reducer = combineReducers({
+        karma: karma.reducer,
         lists: lists.reducer,
         user: user.reducer,
         ui: ui.reducer,
@@ -71,6 +73,7 @@ export const configureStore = () => {
     const store = createStore(reducer, initialState, middleware);
 
     const actions = {
+        karma: bindActionCreators(karma.actions, store.dispatch),
         lists: bindActionCreators(lists.actions, store.dispatch),
         user: bindActionCreators(user.actions, store.dispatch),
         ui: bindActionCreators(ui.actions, store.dispatch),
