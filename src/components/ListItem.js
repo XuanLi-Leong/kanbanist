@@ -37,7 +37,9 @@ class ListItem extends React.Component {
             previousRawText: props.item.text,
             rawText: props.item.text,
             formattedText: this.format(props.item.text),
+            previousDateString: props.item.date_string, // TODO we'd have to refetch the date_string, isRecurring, due_date_utc from Todoist because they handle parsing. due_date_utc lets us render the date/time correctly
             dateString: props.item.date_string,
+            dateStringTemp: props.item.due_date_utc,
             checked: props.checked,
         };
     }
@@ -82,7 +84,7 @@ class ListItem extends React.Component {
         return `${beggining},${content}]]`;
     };
 
-    handleChange = updatedText => {
+    handleTextChange = updatedText => {
         const { rawText } = this.state;
         const isOutlook = isOutlookText(rawText);
         const isNewLine = updatedText.indexOf('\n') >= 0;
@@ -91,6 +93,16 @@ class ListItem extends React.Component {
         } else {
             const newRawText = isOutlook ? this.updateOutlookItem(rawText, updatedText) : updatedText;
             this.setState({ rawText: newRawText });
+        }
+    };
+
+    handleDueDateChange = updatedText => {
+        const { dateString } = this.state;
+        const isNewLine = updatedText.indexOf('\n') >= 0;
+        if (isNewLine) {
+            this.updateItem();
+        } else {
+            this.setState({ dateString: updatedText });
         }
     };
 
@@ -124,12 +136,14 @@ class ListItem extends React.Component {
         this.setState({
             formattedText: this.format(this.state.previousRawText),
             rawText: this.state.previousRawText,
+            dateString: this.state.previousDateString,
             isEditing: false,
             isActuallyEditing: false,
         });
     };
 
     updateItem = () => {
+        // TODO we'd have to refetch the date_string, isRecurring, due_date_utc from Todoist because they handle parsing. due_date_utc lets us render the date/time correctly
         const { item, onUpdate } = this.props;
         const { rawText, dateString } = this.state;
         // Only update if the value actually changed. Note that this may
@@ -140,6 +154,8 @@ class ListItem extends React.Component {
         }
         this.setState({
             previousRawText: rawText,
+            previousDateString: dateString,
+            dateStringTemp: dateString,
             isEditing: false,
             isActuallyEditing: false,
             formattedText: this.format(rawText),
@@ -168,7 +184,7 @@ class ListItem extends React.Component {
 
     render() {
         const { connectDragSource, isDragging, item, timeFormat, collaborator } = this.props;
-        const { checked, rawText, formattedText, isEditing, isActuallyEditing } = this.state;
+        const { checked, dateString, dateStringTemp, rawText, formattedText, isEditing, isActuallyEditing } = this.state;
 
         const isOutlook = isOutlookText(rawText);
 
@@ -199,8 +215,7 @@ class ListItem extends React.Component {
                                 className="ListItem-text"
                                 multiline
                                 value={!isOutlook ? rawText : this.getOutlookContent(rawText)}
-                                isEditing={isActuallyEditing}
-                                onChange={this.handleChange}
+                                onChange={this.handleTextChange}
                                 disabled={checked}
                             />
                         ) : (
@@ -220,6 +235,8 @@ class ListItem extends React.Component {
                     </div>
                     <div className="ListItem-inner-bottom">
                         {isEditing ? (
+                          <div>
+                          <EditableText className="ListItem-project-duedate" value={dateString} onChange={this.handleDueDateChange} disabled={checked} />
                             <div className="ListItem-edit-buttons">
                                 <Button
                                     className="ListItem-edit-button"
@@ -228,14 +245,14 @@ class ListItem extends React.Component {
                                     onClick={this.updateItem}
                                 />
                                 <Button className="ListItem-edit-button" text="Cancel" onClick={this.handleCancel} />
-                            </div>
+                            </div></div>
                         ) : (
                             <div className="non-edit-text">
                                 <span className="ListItem-project-name">{item.project.name}</span>
                                 {isRecurring ? (
                                     <Icon className="ListItem-recurring-icon" iconName="exchange" iconSize={16} />
                                 ) : null}
-                                <ListItemDueDate dueDate={item.due_date_utc} timeFormat={timeFormat} />
+                                <ListItemDueDate dueDate={dateStringTemp} timeFormat={timeFormat} />
                                 {collaborator ? (
                                     collaborator.image_id ? (
                                         <img
