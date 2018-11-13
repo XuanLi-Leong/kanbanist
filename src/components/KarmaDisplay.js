@@ -3,6 +3,11 @@ import { connect } from 'react-redux';
 import { AnchorButton, Icon, Intent } from '@blueprintjs/core';
 
 class KarmaDisplay extends Component {
+    changeVacationMode = () => {
+        const vacationMode = this.props.karma_vacation === 0 ? 1 : 0;
+        this.props.updateVacationMode(vacationMode);
+    };
+
     getTrend = () => {
         return this.props.karma_trend === 'up' ? 'arrow-up' : 'arrow-down';
     };
@@ -32,7 +37,7 @@ class KarmaDisplay extends Component {
                 <AnchorButton
                     className="light-text"
                     iconName={this.getVacation()}
-                    onClick={() => console.log('Pressed karma')}
+                    onClick={this.changeVacationMode}
                     intent={Intent.WARNING}
                     title={this.getVacationTitle()}
                 />
@@ -47,7 +52,7 @@ const mapStateToProps = state => {
         user: state.user.user,
         karma_disabled: state.user.user.features.karma_disabled,
         karma: state.user.user.karma,
-        karma_vacation: state.user.user.karma_vacation,
+        karma_vacation: state.karma.karma_vacation,
         karma_trend: state.user.user.karma_trend,
         weekly_goal: state.user.user.weekly_goal,
         daily_goal: state.user.user.daily_goal,
