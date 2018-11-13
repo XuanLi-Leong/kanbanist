@@ -68,6 +68,10 @@ export default class Todoist {
             .then(productivityData => productivityData);
     }
 
+    static updateVacationMode(apiToken, vacationMode) {
+        return Todoist.sendCommand(apiToken, Todoist.createCommand('update_goals', vacationMode));
+    }
+
     static updateItem(apiToken, updatedItem) {
         return Todoist.sendCommand(apiToken, Todoist.createCommand('item_update', updatedItem));
     }

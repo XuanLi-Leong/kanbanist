@@ -1,5 +1,6 @@
 import Todoist from '../../todoist-client/Todoist';
 import { types, actions, isListBacklog } from '../modules/lists';
+import { types as karmaTypes } from '../modules/karma';
 import List from '../../core/List';
 
 const todoistPersistenceMiddleware = store => next => action => {
@@ -169,6 +170,15 @@ const todoistPersistenceMiddleware = store => next => action => {
                 }
             }
             persistListReorder();
+            break;
+
+        case karmaTypes.UPDATE_VACATION_MODE:
+            function persistVacationModeChange() {
+                const { vacationMode } = action.payload;
+                const vacationModeObject = { vacation_mode: vacationMode };
+                Todoist.updateVacationMode(token, vacationModeObject);
+            }
+            persistVacationModeChange();
             break;
         default:
         // Nothing.
