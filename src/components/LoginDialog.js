@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Button, Dialog, InputGroup, Intent } from '@blueprintjs/core';
 import Todoist from '../todoist-client/Todoist';
+import { actions as karmaActions } from '../redux/modules/karma';
 import { actions as userActions } from '../redux/modules/user';
 import { actions as listActions } from '../redux/modules/lists';
 
@@ -112,6 +113,7 @@ const mapDispatchToProps = dispatch => {
         login: user => {
             dispatch(userActions.login(user));
             dispatch(listActions.fetchLists());
+            dispatch(karmaActions.fetchProductivityStats());
         },
     };
 };

@@ -61,11 +61,12 @@ const mapStateToProps = state => {
         karma_disabled: state.user.user.features.karma_disabled,
         karma: state.user.user.karma,
         karma_vacation: state.karma.karma_vacation,
-        karma_trend: state.user.user.karma_trend,
+        karma_trend: state.karma.karma_trend,
+        karma_graph_data: state.karma.karma_graph_data,
         weekly_goal: state.user.user.weekly_goal,
         daily_goal: state.user.user.daily_goal,
-        magic_num_reached: state.user.user.magic_num_reached, // bool -- goal number ? idk what this is
-        start_day: state.user.user.start_day, // first day of the week?
+        // magic_num_reached: state.user.user.magic_num_reached, // bool -- goal number ? idk what this is
+        // start_day: state.user.user.start_day, // first day of the week?
     };
 };
 

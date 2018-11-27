@@ -63,9 +63,7 @@ export default class Todoist {
     }
 
     static getStats(apiToken) {
-        return fetch(`${GET_STATS_URL}?token=${apiToken}`)
-            .then(res => res.json())
-            .then(productivityData => productivityData);
+        return fetch(`${GET_STATS_URL}?token=${apiToken}`).then(res => res.json());
     }
 
     static updateVacationMode(apiToken, vacationMode) {
