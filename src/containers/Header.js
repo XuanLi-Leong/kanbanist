@@ -3,13 +3,14 @@ import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 import { AnchorButton, Intent, Spinner } from '@blueprintjs/core';
 
+import { actions as karmaActions } from '../redux/modules/karma';
 import { actions as userActions } from '../redux/modules/user';
 import { actions as listsActions } from '../redux/modules/lists';
 import { actions as uiActions } from '../redux/modules/ui';
 
 class Header extends React.Component {
     render() {
-        const { user, fetching, logout, fetchLists, toggleToolbar } = this.props;
+        const { user, fetching, logout, fetchLists, fetchProductivityStats, toggleToolbar } = this.props;
 
         const { loggedIn, token } = user;
 
@@ -39,7 +40,10 @@ class Header extends React.Component {
             <AnchorButton
                 className="light-text header-right"
                 iconName="refresh"
-                onClick={() => fetchLists(token)}
+                onClick={() => {
+                    fetchLists(token);
+                    fetchProductivityStats(token);
+                }}
                 intent={Intent.WARNING}
             />
         );
@@ -108,6 +112,10 @@ const mapDispatchToProps = dispatch => {
 
         fetchLists: token => {
             dispatch(listsActions.fetchLists(token));
+        },
+
+        fetchProductivityStats: token => {
+            dispatch(karmaActions.fetchProductivityStats(token));
         },
 
         toggleToolbar: () => {
