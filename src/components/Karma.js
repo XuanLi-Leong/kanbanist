@@ -84,9 +84,11 @@ const mapStateToProps = state => {
         karma: state.user.user.karma,
         karma_vacation: state.karma.karma_vacation,
         karma_trend: state.karma.karma_trend,
-        karma_graph_data: state.karma.karma_graph_data.map(dataPoint => {
-            return [dataPoint.date, dataPoint.karma_avg];
-        }),
+        karma_graph_data:
+            state.karma.karma_graph_data &&
+            state.karma.karma_graph_data.map(dataPoint => {
+                return [dataPoint.date, dataPoint.karma_avg];
+            }),
         weekly_goal: state.user.user.weekly_goal,
         daily_goal: state.user.user.daily_goal,
         // magic_num_reached: state.user.user.magic_num_reached, // bool -- goal number ? idk what this is
