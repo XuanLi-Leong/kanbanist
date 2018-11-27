@@ -7,15 +7,19 @@ import moment from 'moment';
 
 import KarmaDisplay from '../components/KarmaDisplay';
 import { actions as karmaActions } from '../redux/modules/karma';
+import ReactChartkick, { LineChart } from 'react-chartkick';
+import Chart from 'chart.js';
 
 import { generateQueryString } from '../redux/middleware/trelloist-filter-url';
 import { NAMED_FILTERS } from '../redux/modules/lists';
 
 const MIN_SCREEN_SIZE = 740; // pixels
 
+ReactChartkick.addAdapter(Chart);
+
 class Karma extends Component {
     render() {
-        const { karma, karma_trend, karma_vacation, updateVacationMode, containerWidth } = this.props;
+        const { karma, karma_trend, karma_vacation, updateVacationMode, karma_graph_data, containerWidth } = this.props;
 
         // if coming from small screen, show a reminder button.
         const isSmallScreen = containerWidth < MIN_SCREEN_SIZE;
@@ -51,7 +55,31 @@ class Karma extends Component {
             />
         );
 
-        return <div className="Karma">{karmaComponent}</div>;
+        return (
+            <div className="Karma">
+                {karmaComponent}
+                <div>
+                    Other props:
+                    <br />
+                    karma_disabled: {this.props.karma_disabled}
+                    <br />
+                    weekly_goal: {this.props.weekly_goal}
+                    <br />
+                    daily_goal: {this.props.daily_goal}
+                    <br />
+                </div>
+                <div className="Karma-chart">
+                    <LineChart
+                        data={karma_graph_data}
+                        ytitle="Karma"
+                        xtitle="Date"
+                        curve={false}
+                        messages={{ empty: 'No data' }}
+                        min={null}
+                    />
+                </div>
+            </div>
+        );
     }
 }
 
@@ -62,7 +90,9 @@ const mapStateToProps = state => {
         karma: state.user.user.karma,
         karma_vacation: state.karma.karma_vacation,
         karma_trend: state.karma.karma_trend,
-        karma_graph_data: state.karma.karma_graph_data,
+        karma_graph_data: state.karma.karma_graph_data.map(dataPoint => {
+            return [dataPoint.date, dataPoint.karma_avg];
+        }),
         weekly_goal: state.user.user.weekly_goal,
         daily_goal: state.user.user.daily_goal,
         // magic_num_reached: state.user.user.magic_num_reached, // bool -- goal number ? idk what this is
