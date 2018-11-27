@@ -172,11 +172,47 @@ const todoistPersistenceMiddleware = store => next => action => {
             persistListReorder();
             break;
 
+        case karmaTypes.UPDATE_DAILY_GOAL:
+            function persistDailyGoalChange() {
+                const { dailyGoal } = action.payload;
+                const dailyGoalObject = { daily_goal: dailyGoal };
+                Todoist.updateKarmaGoals(token, dailyGoalObject);
+            }
+            persistDailyGoalChange();
+            break;
+
+        case karmaTypes.UPDATE_WEEKLY_GOAL:
+            function persistWeeklyGoalChange() {
+                const { weeklyGoal } = action.payload;
+                const weeklyGoalObject = { weekly_goal: weeklyGoal };
+                Todoist.updateKarmaGoals(token, weeklyGoalObject);
+            }
+            persistWeeklyGoalChange();
+            break;
+
+        case karmaTypes.UPDATE_IGNORE_DAYS:
+            function persistIgnoreDaysChange() {
+                const { ignoreDays } = action.payload;
+                const ignoreDaysObject = { ignore_days: ignoreDays };
+                Todoist.updateKarmaGoals(token, ignoreDaysObject);
+            }
+            persistIgnoreDaysChange();
+            break;
+
+        case karmaTypes.UPDATE_KARMA_DISABLED:
+            function persistKarmaDisabledChange() {
+                const { karmaDisabled } = action.payload;
+                const karmaDisabledObject = { karma_disabled: karmaDisabled };
+                Todoist.updateKarmaGoals(token, karmaDisabledObject);
+            }
+            persistKarmaDisabledChange();
+            break;
+
         case karmaTypes.UPDATE_VACATION_MODE:
             function persistVacationModeChange() {
                 const { vacationMode } = action.payload;
                 const vacationModeObject = { vacation_mode: vacationMode };
-                Todoist.updateVacationMode(token, vacationModeObject);
+                Todoist.updateKarmaGoals(token, vacationModeObject);
             }
             persistVacationModeChange();
             break;

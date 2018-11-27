@@ -4,6 +4,10 @@ import Todoist from '../../todoist-client/Todoist';
 export const types = {
     UPDATE_PRODUCTIVITY_STATS: 'UPDATE_PRODUCTIVITY_STATS',
     UPDATE_VACATION_MODE: 'UPDATE_VACATION_MODE',
+    UPDATE_DAILY_GOAL: 'UPDATE_DAILY_GOAL',
+    UPDATE_WEEKLY_GOAL: 'UPDATE_WEEKLY_GOAL',
+    UPDATE_IGNORE_DAYS: 'UPDATE_IGNORE_DAYS',
+    UPDATE_KARMA_DISABLED: 'UPDATE_KARMA_DISABLED',
 };
 
 const initialState = {
@@ -11,6 +15,7 @@ const initialState = {
         karma_disabled: 0,
         weekly_goal: 0,
         daily_goal: 0,
+        ignore_days: [],
     },
     karma: 0,
     karma_vacation: 0,
@@ -20,6 +25,13 @@ const initialState = {
 
 export const actions = {
     updateVacationMode: mode => ({ type: types.UPDATE_VACATION_MODE, payload: { vacationMode: mode } }),
+    updateDailyGoal: goal => ({ type: types.UPDATE_DAILY_GOAL, payload: { dailyGoal: goal } }),
+    updateWeeklyGoal: goal => ({ type: types.UPDATE_WEEKLY_GOAL, payload: { weeklyGoal: goal } }),
+    updateIgnoreDays: ignoreDays => ({ type: types.UPDATE_IGNORE_DAYS, payload: { ignoreDays: ignoreDays } }),
+    updateKarmaDisabled: karmaDisabled => ({
+        type: types.UPDATE_KARMA_DISABLED,
+        payload: { karmaDisabled: karmaDisabled },
+    }),
     fetchProductivityStats: () => (dispatch, getState) => {
         const state = getState();
         Todoist.getStats(state.user.user.token)
@@ -49,10 +61,43 @@ export const reducer = (state = initialState, action) => {
                     karma_disabled: action.payload.goals.karma_disabled,
                     weekly_goal: action.payload.goals.weekly_goal,
                     daily_goal: action.payload.goals.daily_goal,
+                    ignore_days: action.payload.goals.ignore_days,
                 },
                 karma: action.payload.karma,
                 karma_trend: action.payload.karma_trend,
                 karma_graph_data: action.payload.karma_graph_data,
+            };
+        case types.UPDATE_DAILY_GOAL:
+            return {
+                ...state,
+                goals: {
+                    ...state.goals,
+                    daily_goal: action.payload.goals.dailyGoal,
+                },
+            };
+        case types.UPDATE_WEEKLY_GOAL:
+            return {
+                ...state,
+                goals: {
+                    ...state.goals,
+                    weekly_goal: action.payload.goals.weeklyGoal,
+                },
+            };
+        case types.UPDATE_IGNORE_DAYS:
+            return {
+                ...state,
+                goals: {
+                    ...state.goals,
+                    ignore_days: action.payload.goals.ignoreDays,
+                },
+            };
+        case types.UPDATE_KARMA_DISABLED:
+            return {
+                ...state,
+                goals: {
+                    ...state.goals,
+                    karma_disabled: action.payload.goals.karma_disabled,
+                },
             };
         case types.UPDATE_VACATION_MODE:
             return { ...state, karma_vacation: action.payload.vacationMode };
