@@ -67,7 +67,7 @@ class Header extends React.Component {
         const atKarma = this.props.history.location.pathname === '/karma';
         const showBoardButtons = atBoard && loggedIn;
         const boardButton = <button className="pt-button pt-minimal pt-icon-control">Board</button>;
-        const karmaButton = <button className="pt-button pt-minimal pt-icon-office">Karma</button>;
+        const karmaButton = <button className="pt-button pt-minimal pt-icon-pulse">Karma</button>;
 
         return (
             <nav className="Header pt-navbar pt-fixed-top">
