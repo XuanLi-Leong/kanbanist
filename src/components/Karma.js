@@ -58,12 +58,19 @@ class Karma extends Component {
         const karmaChart = (
             <div className="Karma-chart">
                 <LineChart
+                    id="karma-chart"
                     data={karma_graph_data}
                     ytitle="Karma"
                     xtitle="Date"
                     curve={false}
                     messages={{ empty: 'No data' }}
                     min={null}
+                    library={{
+                        scales: {
+                            xAxes: [{ gridLines: { color: '#8A9BA8' } }],
+                            yAxes: [{ gridLines: { color: '#8A9BA8' } }],
+                        },
+                    }}
                 />
             </div>
         );
