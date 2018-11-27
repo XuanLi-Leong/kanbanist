@@ -19,14 +19,25 @@ ReactChartkick.addAdapter(Chart);
 
 class Karma extends Component {
     render() {
-        const { karma, karma_trend, karma_vacation, updateVacationMode, karma_graph_data, containerWidth } = this.props;
+        const {
+            karma,
+            karma_trend,
+            karma_vacation,
+            karma_graph_data,
+            karma_disabled,
+            weekly_goal,
+            daily_goal,
+            containerWidth,
+        } = this.props;
 
         const karmaDisplay = (
             <KarmaDisplay
-                updateVacationMode={updateVacationMode}
                 karma={karma}
                 karma_trend={karma_trend}
                 karma_vacation={karma_vacation}
+                karma_disabled={karma_disabled}
+                weekly_goal={weekly_goal}
+                daily_goal={daily_goal}
             />
         );
 
@@ -61,34 +72,24 @@ class Karma extends Component {
 
 const mapStateToProps = state => {
     return {
-        karma_disabled: state.karma.goals.karma_disabled,
         karma: state.karma.karma,
-        karma_vacation: state.karma.karma_vacation,
         karma_trend: state.karma.karma_trend,
         karma_graph_data:
             state.karma.karma_graph_data &&
             state.karma.karma_graph_data.map(dataPoint => {
                 return [dataPoint.date, dataPoint.karma_avg];
             }),
+        karma_disabled: state.karma.goals.karma_disabled,
+        karma_vacation: state.karma.karma_vacation,
         weekly_goal: state.karma.goals.weekly_goal,
         daily_goal: state.karma.goals.daily_goal,
+        ignore_days: state.karma.goals.ignore_days,
         // magic_num_reached: state.user.user.magic_num_reached, // bool -- goal number ? idk what this is
         // start_day: state.user.user.start_day, // first day of the week?
     };
 };
 
-const mapDispatchToProps = dispatch => {
-    return {
-        updateVacationMode: mode => {
-            dispatch(karmaActions.updateVacationMode(mode));
-        },
-    };
-};
-
 export default flow(
     Dimensions({ className: 'Karma-Wrapper' }),
-    connect(
-        mapStateToProps,
-        mapDispatchToProps
-    )
+    connect(mapStateToProps)
 )(Karma);
