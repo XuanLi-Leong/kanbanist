@@ -85,7 +85,7 @@ class Header extends React.Component {
                     {atKarma ? karmaButton : <Link to={'/karma'}>{karmaButton}</Link>}
                 </div>
                 <div className="pt-navbar-group pt-align-right hide-if-small-500">
-                    {showBoardButtons ? (fetching ? spinner : syncButton) : emptyDiv}
+                    {atKarma || atBoard ? (fetching ? spinner : syncButton) : emptyDiv}
                     {showBoardButtons ? backlogButton : emptyDiv}
                     {showBoardButtons ? toggleToolbarButton : emptyDiv}
                     {loggedIn ? logoutButton : loginButton}
