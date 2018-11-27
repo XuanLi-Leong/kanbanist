@@ -14,7 +14,7 @@ class KarmaDisplay extends Component {
     };
 
     getVacation = () => {
-        return this.props.karma_vacation === 1 ? 'mountain' : 'office';
+        return this.props.karma_vacation === 1 ? 'home' : 'office';
     };
 
     getVacationTitle = () => {
