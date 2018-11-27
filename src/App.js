@@ -5,6 +5,7 @@ import ReactGA from 'react-ga';
 import { FocusStyleManager } from '@blueprintjs/core';
 
 import Board from './components/Board';
+import Karma from './components/Karma';
 import Header from './containers/Header';
 import Footer from './containers/Footer';
 
@@ -53,6 +54,7 @@ class App extends React.Component {
                             {/* note: add new paths to netlify/_redirects */}
                             <Route exact={true} path="/" component={Home} />
                             <Route path="/board" component={props => <Board actions={actions} {...props} />} />
+                            <Route path="/karma" component={props => <Karma actions={actions} {...props} />} />
                             <Route path="/issues" component={Issues} />
                             <Route path="/demo" component={Demo} />
                             <Route path="/donate" component={Donate} />
