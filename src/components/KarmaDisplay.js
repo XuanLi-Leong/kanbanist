@@ -18,7 +18,7 @@ class KarmaDisplay extends Component {
     };
 
     getVacation = () => {
-        return this.props.karma_vacation === 1 ? 'path-search' : 'take-action';
+        return this.props.karma_vacation === 1 ? 'mountain' : 'office';
     };
 
     getVacationTitle = () => {
@@ -45,18 +45,4 @@ class KarmaDisplay extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        user: state.user.user,
-        karma_disabled: state.user.user.features.karma_disabled,
-        karma: state.user.user.karma,
-        karma_vacation: state.karma.karma_vacation,
-        karma_trend: state.user.user.karma_trend,
-        weekly_goal: state.user.user.weekly_goal,
-        daily_goal: state.user.user.daily_goal,
-        magic_num_reached: state.user.user.magic_num_reached, // bool -- goal number ? idk what this is
-        start_day: state.user.user.start_day, // first day of the week?
-    };
-};
-
-export default connect(mapStateToProps)(KarmaDisplay);
+export default KarmaDisplay;
