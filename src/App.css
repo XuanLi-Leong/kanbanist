@@ -437,6 +437,14 @@ p {
   flex-basis: 255px;
 }
 
+.Karma-settings-item {
+  background-color: rgba(138, 155, 168, 0.2);
+  border-radius: 3px;
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
 /* fixes the scrollbar showing issue the Jesse reported */
 .pt-editable-text.pt-multiline .pt-editable-content {
   overflow: hidden !important;

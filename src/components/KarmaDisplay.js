@@ -27,8 +27,27 @@ class KarmaDisplay extends Component {
     };
 
     render() {
+        // const editableDailyGoal = isEditing ? (
+        //     <input className="ListItem-text" type="number" onSubmit={this.handleChange} disabled={checked} />
+        // ) : (
+        //     <div className="ListItem-text ListItem-text-formatted" onClick={this.handleOnEdit}>
+        //         my goal
+        //     </div>
+        // );
+        const vacationMode = (
+            <div className="Karma-settings-item">Vacation mode {this.props.karma_vacation === 0 ? 'OFF' : 'ON'}</div>
+        );
+        const dailyGoal = <div className="Karma-settings-item">Daily goal: {this.props.daily_goal}</div>;
+        const weeklyGoal = <div className="Karma-settings-item">Weekly goal: {this.props.weekly_goal}</div>;
+        const disableKarmaSwitch = (
+            <div className="Karma-settings-item">
+                {this.props.karma_disabled === 0 ? 'Karma is active' : 'Karma is disabled'}
+            </div>
+        );
         return (
             <div className="Karma-settings Karma-card">
+                <Icon className="header-right" iconName={this.getTrend()} title={this.getTrendTitle()} />
+                Karma: {this.props.karma}
                 <AnchorButton
                     className="light-text header-right"
                     iconName={this.getVacation()}
@@ -36,14 +55,10 @@ class KarmaDisplay extends Component {
                     intent={Intent.WARNING}
                     title={this.getVacationTitle()}
                 />
-                <Tag iconName={this.getTrend()} className="pt-large pt-minimal header-right">
-                    <Icon className="header-right" iconName={this.getTrend()} title={this.getTrendTitle()} />
-                    Karma: {this.props.karma}
-                </Tag>
-                <span>{this.props.karma_disabled === 0 ? 'Karma is active' : 'Karma is disabled'}</span>
-                <span>Daily goal: {this.props.daily_goal}</span>
-                <span>Weekly goal: {this.props.weekly_goal}</span>
-                <span className="pt-navbar-divider" />
+                {vacationMode}
+                {dailyGoal}
+                {weeklyGoal}
+                {disableKarmaSwitch}
             </div>
         );
     }
