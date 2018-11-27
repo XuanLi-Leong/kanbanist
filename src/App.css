@@ -232,6 +232,10 @@ p {
   margin-right: 15px;
 }
 
+.List .List-text-filter {
+  margin-bottom: 10px;
+}
+
 .List .List-list-items {
   max-height: calc(100vh - 225px);
   overflow-y: hidden;
