@@ -49,14 +49,15 @@ class KarmaDisplay extends Component {
     }
 }
 
-const mapDispatchToProps = dispatch => {
-    return {
-        updateVacationMode: karmaActions.updateVacationMode,
-        updateDailyGoal: karmaActions.updateDailyGoal,
-        updateWeeklyGoal: karmaActions.updateWeeklyGoal,
-        updateIgnoreDays: karmaActions.updateIgnoreDays,
-        updateKarmaDisabled: karmaActions.updateKarmaDisabled,
-    };
+const mapDispatchToProps = {
+    updateVacationMode: karmaActions.updateVacationMode,
+    updateDailyGoal: karmaActions.updateDailyGoal,
+    updateWeeklyGoal: karmaActions.updateWeeklyGoal,
+    updateIgnoreDays: karmaActions.updateIgnoreDays,
+    updateKarmaDisabled: karmaActions.updateKarmaDisabled,
 };
 
-export default connect(mapDispatchToProps)(KarmaDisplay);
+export default connect(
+    null,
+    mapDispatchToProps
+)(KarmaDisplay);
