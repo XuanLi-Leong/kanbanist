@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { DropTarget } from 'react-dnd';
 import flow from 'lodash/flow';
 import { Intent } from '@blueprintjs/core';
+import memoize from 'memoize-one';
 
 import ListTitle from './ListTitle';
 import ListItem from './ListItem';
@@ -21,6 +22,7 @@ class List extends React.Component {
         super(props);
         this.state = {
             allChecked: false,
+            filterText: '',
         };
     }
 
@@ -57,6 +59,10 @@ class List extends React.Component {
         }
     };
 
+    handleSearchChange = event => {
+        this.setState({ filterText: event.target.value });
+    };
+
     handleCompleteAll = () => {
         const { list, onListCompleteAll } = this.props;
 
@@ -78,6 +84,14 @@ class List extends React.Component {
     handleDelete = () => {
         this.props.onListDelete(this.props.list);
     };
+
+    filterItems = memoize((listItemToRender, filterText) => {
+        const lowerCaseFilterText = filterText.trim().toLowerCase();
+        if (lowerCaseFilterText === '') {
+            return listItemToRender;
+        }
+        return listItemToRender.filter(item => item.text.toLowerCase().includes(lowerCaseFilterText));
+    });
 
     render() {
         const {
@@ -106,6 +120,7 @@ class List extends React.Component {
 
         // add spacer element to correct place in list when hovering a task over a list
         let listItemToRender = list.items;
+        listItemToRender = this.filterItems(listItemToRender, this.state.filterText);
         if (listItemIsOver) {
             const item = monitorItem.item;
             const sortByField = sortBy.get('field');
@@ -158,6 +173,16 @@ class List extends React.Component {
                         disabled={!canEditTitle}
                         showListMenu={showListMenu}
                     />
+                    <div className="List-text-filter pt-input-group">
+                        <span className="pt-icon pt-icon-search" />
+                        <input
+                            className="pt-input pt-round"
+                            onChange={this.handleSearchChange}
+                            type="search"
+                            placeholder="Filter tasks"
+                            dir="auto"
+                        />
+                    </div>
                     <div className="List-list-items">
                         {listItemToRender.map(item => {
                             if (item.isSpacer) {
