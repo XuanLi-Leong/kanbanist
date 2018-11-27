@@ -46,7 +46,7 @@ class Karma extends Component {
             );
         }
 
-        const karmaComponent = (
+        const karmaDisplay = (
             <KarmaDisplay
                 updateVacationMode={updateVacationMode}
                 karma={karma}
@@ -55,29 +55,23 @@ class Karma extends Component {
             />
         );
 
+        const karmaChart = (
+            <div className="Karma-chart">
+                <LineChart
+                    data={karma_graph_data}
+                    ytitle="Karma"
+                    xtitle="Date"
+                    curve={false}
+                    messages={{ empty: 'No data' }}
+                    min={null}
+                />
+            </div>
+        );
+
         return (
             <div className="Karma">
-                {karmaComponent}
-                <div>
-                    Other props:
-                    <br />
-                    karma_disabled: {this.props.karma_disabled}
-                    <br />
-                    weekly_goal: {this.props.weekly_goal}
-                    <br />
-                    daily_goal: {this.props.daily_goal}
-                    <br />
-                </div>
-                <div className="Karma-chart">
-                    <LineChart
-                        data={karma_graph_data}
-                        ytitle="Karma"
-                        xtitle="Date"
-                        curve={false}
-                        messages={{ empty: 'No data' }}
-                        min={null}
-                    />
-                </div>
+                {karmaDisplay}
+                {karmaChart}
             </div>
         );
     }
