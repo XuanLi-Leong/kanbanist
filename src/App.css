@@ -410,13 +410,31 @@ p {
   margin-top: 10px;
 }
 
-.Karma .Karma-chart {
-  padding: 10px;
-  width: 85%;
-  margin: auto;
-  margin-top: 20px;
+.Karma {
+  padding: 15px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+}
+
+.Karma .Karma-card {
   background-color: #BFCCD6;
+  padding: 10px;
   border-radius: 3px;
+}
+
+.Karma-card + .Karma-card {
+  margin-left: 15px;
+}
+
+.Karma .Karma-chart {
+  flex-grow: 2;
+}
+
+.Karma .Karma-settings {
+  flex-grow: 1;
+  flex-basis: 255px;
 }
 
 /* fixes the scrollbar showing issue the Jesse reported */

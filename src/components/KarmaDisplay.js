@@ -5,11 +5,6 @@ import { AnchorButton, Icon, Intent, Tag } from '@blueprintjs/core';
 import { actions as karmaActions } from '../redux/modules/karma';
 
 class KarmaDisplay extends Component {
-    changeVacationMode = () => {
-        const vacationMode = this.props.karma_vacation === 0 ? 1 : 0;
-        this.props.updateVacationMode(vacationMode);
-    };
-
     getTrend = () => {
         return this.props.karma_trend === 'up' ? 'arrow-up' : 'arrow-down';
     };
@@ -26,9 +21,14 @@ class KarmaDisplay extends Component {
         return this.props.karma_vacation === 1 ? 'Karma vacation mode on' : 'Karma vacation mode off';
     };
 
+    changeVacationMode = () => {
+        const vacationMode = this.props.karma_vacation === 0 ? 1 : 0;
+        this.props.updateVacationMode(vacationMode);
+    };
+
     render() {
         return (
-            <div className="Karma">
+            <div className="Karma-settings Karma-card">
                 <AnchorButton
                     className="light-text header-right"
                     iconName={this.getVacation()}

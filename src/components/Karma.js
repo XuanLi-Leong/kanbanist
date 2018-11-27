@@ -42,7 +42,7 @@ class Karma extends Component {
         );
 
         const karmaChart = (
-            <div className="Karma-chart">
+            <div className="Karma-chart Karma-card">
                 <LineChart
                     id="karma-chart"
                     data={karma_graph_data}
@@ -63,8 +63,8 @@ class Karma extends Component {
 
         return (
             <div className="Karma">
-                {karmaChart}
                 {karmaDisplay}
+                {karmaChart}
             </div>
         );
     }
