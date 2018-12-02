@@ -49,6 +49,13 @@ class Toolbar extends Component {
                         updateListsFilter(lists);
                     }
                 }}
+                onChangeAllEmpty={isChecked => {
+                    if (isChecked) {
+                        updateListsFilter(filteredLists.filter(el => el.items.size !== 0));
+                    } else {
+                        updateListsFilter(filteredLists.concat(lists.filter(el => el.items.size === 0)));
+                    }
+                }}
             />
         );
 

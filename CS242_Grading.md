@@ -8,6 +8,8 @@
 
 ### Requirement 3: Shortcut to filter out empty labels (#8)
 
+_Expected: 2.5/2.5_
+
 https://github.com/mwakerman/kanbanist/issues/8
 
 ### Requirement 4: Shortcut to filter out labels by number of items

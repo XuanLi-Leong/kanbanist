@@ -15,8 +15,32 @@ export default class FilterMenu extends React.Component {
         this.props.onChangeAll(value);
     };
 
+    handleAllEmptyCheckbox = event => {
+        const target = event.target;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        this.props.onChangeAllEmpty(value);
+    };
+
     render() {
         const { checkboxItems, selectedItems, title, labelProperty } = this.props;
+
+        const listsFilter = this.props.title === 'Lists Filter';
+        let toggleEmptyCheckbox = null;
+
+        if (listsFilter) {
+            const allEmptyChecked = checkboxItems.every(item => {
+                return item.items.size !== 0 || selectedItems.contains(item);
+            });
+            toggleEmptyCheckbox = (
+                <Checkbox
+                    style={{ fontWeight: 'bold' }}
+                    key="empty-checkbox"
+                    checked={allEmptyChecked}
+                    label={'Empty lists'}
+                    onChange={this.handleAllEmptyCheckbox}
+                />
+            );
+        }
 
         const allSelected = checkboxItems.filter(el => !selectedItems.contains(el)).isEmpty();
 
@@ -32,12 +56,15 @@ export default class FilterMenu extends React.Component {
                         label="All"
                         onChange={this.handleAllCheckbox}
                     />
+                    {listsFilter && toggleEmptyCheckbox}
                     {checkboxItems.map(item => {
+                        let labelString = item[labelProperty];
+                        if (listsFilter) labelString += '\t(' + item['items'].size + ')';
                         return (
                             <Checkbox
                                 key={item.id}
                                 checked={selectedItems.contains(item)}
-                                label={item[labelProperty]}
+                                label={labelString}
                                 onChange={event => this.handleCheckbox(item, event)}
                             />
                         );
