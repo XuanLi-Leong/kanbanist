@@ -2,24 +2,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import flow from 'lodash/flow';
 import Dimensions from 'react-dimensions';
-import { Button, Intent, NonIdealState } from '@blueprintjs/core';
-import moment from 'moment';
 
-import KarmaDisplay from '../components/KarmaDisplay';
-import { actions as karmaActions } from '../redux/modules/karma';
-import ReactChartkick, { LineChart } from 'react-chartkick';
-import Chart from 'chart.js';
-
-import { generateQueryString } from '../redux/middleware/trelloist-filter-url';
-import { NAMED_FILTERS } from '../redux/modules/lists';
-
-const MIN_SCREEN_SIZE = 740; // pixels
-
-ReactChartkick.addAdapter(Chart);
+import KarmaSettings from '../components/KarmaSettings';
+import KarmaCharts from '../components/KarmaCharts';
 
 class Karma extends Component {
     render() {
         const {
+            ignore_days,
             karma,
             karma_trend,
             karma_vacation,
@@ -27,44 +17,26 @@ class Karma extends Component {
             karma_disabled,
             weekly_goal,
             daily_goal,
-            containerWidth,
         } = this.props;
 
-        const karmaDisplay = (
-            <KarmaDisplay
+        const karmaSettings = (
+            <KarmaSettings
                 karma={karma}
                 karma_trend={karma_trend}
                 karma_vacation={karma_vacation}
                 karma_disabled={karma_disabled}
                 weekly_goal={weekly_goal}
                 daily_goal={daily_goal}
+                ignore_days={ignore_days}
             />
         );
 
-        const karmaChart = (
-            <div className="Karma-chart Karma-card">
-                <LineChart
-                    id="karma-chart"
-                    data={karma_graph_data}
-                    ytitle="Karma"
-                    xtitle="Date"
-                    curve={false}
-                    messages={{ empty: 'No data' }}
-                    min={null}
-                    library={{
-                        scales: {
-                            xAxes: [{ gridLines: { color: '#8A9BA8' } }],
-                            yAxes: [{ gridLines: { color: '#8A9BA8' } }],
-                        },
-                    }}
-                />
-            </div>
-        );
+        const karmaCharts = <KarmaCharts karma_graph_data={karma_graph_data} />;
 
         return (
             <div className="Karma">
-                {karmaDisplay}
-                {karmaChart}
+                {karmaSettings}
+                {karmaCharts}
             </div>
         );
     }

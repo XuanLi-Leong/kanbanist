@@ -4,6 +4,8 @@
 
 ### Requirement 1: Edit Karma settings
 
+_Expected: 2.5/2.5_
+
 ### Requirement 2: Karma graph for goals
 
 ### Requirement 3: Filter text within each menu
