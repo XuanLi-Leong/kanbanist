@@ -4,17 +4,17 @@
 
 ### Requirement 1: Edit Karma settings
 
-### Requirement 2: Filter text within each menu
+### Requirement 2: Karma graph for goals
+
+### Requirement 3: Filter text within each menu
 
 _Expected: 2.5/2.5_
 
-### Requirement 3: Shortcut to filter out empty labels (#8)
+### Requirement 4: Shortcut to filter out empty labels (#8)
 
 _Expected: 2.5/2.5_
 
 https://github.com/mwakerman/kanbanist/issues/8
-
-### Requirement 4: Shortcut to filter out labels by number of items
 
 ### Requirement 5: Testing
 
