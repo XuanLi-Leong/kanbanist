@@ -6,7 +6,9 @@
 
 _Expected: 2.5/2.5_
 
-### Requirement 2: Karma graph for goals
+### Requirement 2: Karma graph/streak for additional data
+
+_Expected: 2.5/2.5_
 
 ### Requirement 3: Filter text within each menu
 
@@ -22,12 +24,12 @@ https://github.com/mwakerman/kanbanist/issues/8
 
 ## Week 4
 
-### Requirement 1:
+### Requirement 1: Karma graph for items to reflect project color (stacked bar graph)
 
-### Requirement 2:
+### Requirement 2: Show karma update reasons
 
-### Requirement 3:
+### Requirement 3: Display item priority
 
-### Requirement 4:
+### Requirement 4: Sync / Modify item priority
 
-### Requirement 5:
+### Requirement 5: Testing
