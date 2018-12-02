@@ -21,6 +21,7 @@ const initialState = {
     karma_vacation: 0,
     karma_trend: 'up',
     karma_graph_data: [],
+    days_items: [],
 };
 
 export const actions = {
@@ -36,9 +37,8 @@ export const actions = {
         const state = getState();
         Todoist.getStats(state.user.user.token)
             .then(response => {
-                console.log(response);
-                const { karma_trend, karma_graph_data, goals, karma } = response;
-                dispatch(actions.fetchSuccess(karma_trend, karma_graph_data, goals, karma));
+                const { karma_trend, karma_graph_data, days_items, week_items, goals, karma } = response;
+                dispatch(actions.fetchSuccess({ karma_trend, karma_graph_data, days_items, week_items, goals, karma }));
             })
             .catch(err => {
                 Raven.captureException(err);
@@ -46,9 +46,9 @@ export const actions = {
                 // dispatch(actions.fetchFailure(err.message || 'Could not fetch Todoist productivity stats'));
             });
     },
-    fetchSuccess: (karma_trend, karma_graph_data, goals, karma) => ({
+    fetchSuccess: productivityStats => ({
         type: types.UPDATE_PRODUCTIVITY_STATS,
-        payload: { karma_trend, karma_graph_data, goals, karma },
+        payload: productivityStats,
     }),
 };
 
@@ -62,10 +62,16 @@ export const reducer = (state = initialState, action) => {
                     weekly_goal: action.payload.goals.weekly_goal,
                     daily_goal: action.payload.goals.daily_goal,
                     ignore_days: action.payload.goals.ignore_days,
+                    current_daily_streak: action.payload.goals.current_daily_streak,
+                    max_daily_streak: action.payload.goals.max_daily_streak,
+                    current_weekly_streak: action.payload.goals.current_weekly_streak,
+                    max_weekly_streak: action.payload.goals.max_weekly_streak,
                 },
                 karma: action.payload.karma,
                 karma_trend: action.payload.karma_trend,
                 karma_graph_data: action.payload.karma_graph_data,
+                days_items: action.payload.days_items,
+                week_items: action.payload.week_items,
             };
         case types.UPDATE_DAILY_GOAL:
             return {

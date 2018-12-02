@@ -1,7 +1,7 @@
 // Karma component in the header
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Switch, EditableText, AnchorButton, Icon, Intent, Tag } from '@blueprintjs/core';
+import { Switch, EditableText, AnchorButton, Icon, Intent } from '@blueprintjs/core';
 import { actions as karmaActions } from '../redux/modules/karma';
 
 class KarmaSettings extends Component {
@@ -21,6 +21,7 @@ class KarmaSettings extends Component {
         if (this.props.weeklyGoal !== prevProps.weeklyGoal) {
             stateUpdater = { ...stateUpdater, weeklyGoal: this.props.weekly_goal };
         }
+        return stateUpdater;
     }
 
     getTrend = () => {
@@ -124,9 +125,10 @@ class KarmaSettings extends Component {
                 />
             </div>
         );
+        const ignoreDaysComponent = this.props.ignore_days.map(num => <div key={num}>{num}</div>);
 
         return (
-            <div className="Karma-settings Karma-card">
+            <div className="Karma-settings">
                 <h6>
                     <Icon className="header-right" iconName={this.getTrend()} title={this.getTrendTitle()} />
                     Karma: {this.props.karma}
@@ -142,9 +144,7 @@ class KarmaSettings extends Component {
                 {vacationModeSwitch}
                 {dailyGoalComponent}
                 {weeklyGoalComponent}
-                {this.props.ignore_days.map(num => (
-                    <div key={num}>{num}</div>
-                ))}
+                {ignoreDaysComponent}
             </div>
         );
     }

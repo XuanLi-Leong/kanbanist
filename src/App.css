@@ -418,7 +418,7 @@ p {
   align-items: flex-start;
 }
 
-.Karma .Karma-card {
+.Karma-card {
   background-color: #BFCCD6;
   padding: 10px;
   border-radius: 3px;
@@ -428,8 +428,12 @@ p {
   margin-left: 15px;
 }
 
-.Karma .Karma-chart {
+.Karma-chart {
   flex-grow: 2;
+}
+
+.Karma-streak-bar {
+  margin-bottom: 20px;
 }
 
 .Karma .Karma-settings {
