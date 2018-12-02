@@ -6,6 +6,8 @@
 
 ### Requirement 2: Filter text within each menu
 
+_Expected: 2.5/2.5_
+
 ### Requirement 3: Shortcut to filter out empty labels (#8)
 
 _Expected: 2.5/2.5_

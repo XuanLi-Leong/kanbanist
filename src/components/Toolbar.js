@@ -169,6 +169,9 @@ class Toolbar extends Component {
                 <Select
                     className="Toolbar-button"
                     items={projects}
+                    itemPredicate={(query, item) => {
+                        return item.name.toLowerCase().includes(query.trim().toLowerCase());
+                    }}
                     itemRenderer={({ handleClick, item, isActive }) => (
                         <MenuItem
                             className={item.id === defaultProjectId ? Classes.ACTIVE : ''}
@@ -178,7 +181,7 @@ class Toolbar extends Component {
                         />
                     )}
                     onItemSelect={item => setDefaultProject(item.id)}
-                    filterable={false}>
+                    filterable={true}>
                     <Button text="New items project" iconName="add-to-artifact" rightIconName="double-caret-vertical" />
                 </Select>
 

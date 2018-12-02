@@ -168,6 +168,10 @@ p {
   overflow-y: auto;
 }
 
+.FilterMenu-text-filter {
+  margin-bottom: 10px;
+}
+
 .ListsPanel {
   padding: 15px;
   display: flex;
