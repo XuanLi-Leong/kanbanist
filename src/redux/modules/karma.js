@@ -72,7 +72,7 @@ export const reducer = (state = initialState, action) => {
                 ...state,
                 goals: {
                     ...state.goals,
-                    daily_goal: action.payload.goals.dailyGoal,
+                    daily_goal: action.payload.dailyGoal,
                 },
             };
         case types.UPDATE_WEEKLY_GOAL:
@@ -80,7 +80,7 @@ export const reducer = (state = initialState, action) => {
                 ...state,
                 goals: {
                     ...state.goals,
-                    weekly_goal: action.payload.goals.weeklyGoal,
+                    weekly_goal: action.payload.weeklyGoal,
                 },
             };
         case types.UPDATE_IGNORE_DAYS:
@@ -88,7 +88,7 @@ export const reducer = (state = initialState, action) => {
                 ...state,
                 goals: {
                     ...state.goals,
-                    ignore_days: action.payload.goals.ignoreDays,
+                    ignore_days: action.payload.ignoreDays,
                 },
             };
         case types.UPDATE_KARMA_DISABLED:
@@ -96,7 +96,7 @@ export const reducer = (state = initialState, action) => {
                 ...state,
                 goals: {
                     ...state.goals,
-                    karma_disabled: action.payload.goals.karma_disabled,
+                    karma_disabled: action.payload.karmaDisabled,
                 },
             };
         case types.UPDATE_VACATION_MODE:
