@@ -410,11 +410,62 @@ p {
   margin-top: 10px;
 }
 
-.Karma .Karma-chart {
-    padding: 20px;
-    width: 85%;
-    margin: auto;
-    margin-top: 20px;
+.Karma {
+  padding: 15px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+}
+
+.Karma-card {
+  background-color: #BFCCD6;
+  padding: 10px;
+  border-radius: 3px;
+}
+
+.Karma-card + .Karma-card {
+  margin-left: 15px;
+}
+
+.Karma-chart {
+  flex-grow: 2;
+}
+
+.Karma-streak-bar {
+  margin-bottom: 20px;
+}
+
+.Karma .Karma-settings {
+  flex-grow: 1;
+  flex-basis: 255px;
+}
+
+.Karma-settings-item {
+  background-color: rgba(138, 155, 168, 0.2);
+  border-radius: 3px;
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.Karma-settings-switch {
+  display: unset;
+}
+
+.Karma-settings-numeric-div {
+  display: flex;
+  padding-left: 5px;
+  width: 215px;
+  align-items: center;
+
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.Karma-settings-numeric {
+  width: 215px;
+  font-family: sans-serif;
 }
 
 /* fixes the scrollbar showing issue the Jesse reported */
