@@ -1,16 +1,22 @@
-// Karma component in the header
+/*
+
+ Card segment that shows karma streaks
+
+ */
 import React, { Component } from 'react';
 import { Intent, ProgressBar } from '@blueprintjs/core';
 
 class KarmaStreaks extends Component {
     getValue = (current, max) => {
         if (current === 0) {
+            // When current streak is 0, still show a tiny percentage
             return max / 1000;
         } else {
             return current / max;
         }
     };
 
+    // Shows different color based on how well the user is doing
     getIntent = (current, max) => {
         if (current === 0) {
             return Intent.DANGER;
@@ -23,13 +29,17 @@ class KarmaStreaks extends Component {
 
     makeStreakComponent = (current, max) => {
         return (
-            <ProgressBar
-                className="Karma-streak-bar pt-no-stripes pt-no-animation"
-                value={this.getValue(current, max)}
-                intent={this.getIntent(current, max)}
-                stripes={false}
-                animate={false}
-            />
+            <div>
+                <ProgressBar
+                    className="Karma-streak-bar pt-no-stripes pt-no-animation"
+                    value={this.getValue(current, max)}
+                    intent={this.getIntent(current, max)}
+                    stripes={false}
+                    animate={false}
+                />
+                <p>Current streak: {current}</p>
+                <p>Maximum streak: {max}</p>
+            </div>
         );
     };
 
@@ -44,10 +54,14 @@ class KarmaStreaks extends Component {
         );
         return (
             <div className="Karma-streaks Karma-card">
-                <h6>Daily Streak</h6>
-                {dailyStreakComponent}
-                <h6>Weekly Streak</h6>
-                {weeklyStreakComponent}
+                <div className="Karma-streak-section">
+                    <h6>Daily Streak</h6>
+                    {dailyStreakComponent}
+                </div>
+                <div className="Karma-streak-section">
+                    <h6>Weekly Streak</h6>
+                    {weeklyStreakComponent}
+                </div>
             </div>
         );
     }

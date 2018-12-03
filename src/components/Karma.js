@@ -1,3 +1,9 @@
+/*
+
+ Karma page
+
+ */
+
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import flow from 'lodash/flow';
