@@ -410,6 +410,13 @@ p {
   margin-top: 10px;
 }
 
+.Karma .Karma-chart {
+    padding: 20px;
+    width: 85%;
+    margin: auto;
+    margin-top: 20px;
+}
+
 /* fixes the scrollbar showing issue the Jesse reported */
 .pt-editable-text.pt-multiline .pt-editable-content {
   overflow: hidden !important;

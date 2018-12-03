@@ -64,8 +64,10 @@ class Header extends React.Component {
 
         const emptyDiv = <div className="header-right" style={{ marginLeft: '0px' }} />;
         const atBoard = this.props.history.location.pathname === '/board';
+        const atKarma = this.props.history.location.pathname === '/karma';
         const showBoardButtons = atBoard && loggedIn;
         const boardButton = <button className="pt-button pt-minimal pt-icon-control">Board</button>;
+        const karmaButton = <button className="pt-button pt-minimal pt-icon-pulse">Karma</button>;
 
         return (
             <nav className="Header pt-navbar pt-fixed-top">
@@ -76,6 +78,7 @@ class Header extends React.Component {
                     <span className="pt-navbar-divider" />
                     {/* Board button does nothing if at /board (prevents potential query string being cleared) */}
                     {atBoard ? boardButton : <Link to={'/board'}>{boardButton}</Link>}
+                    {atKarma ? karmaButton : <Link to={'/karma'}>{karmaButton}</Link>}
                 </div>
                 <div className="pt-navbar-group pt-align-right hide-if-small-500">
                     {showBoardButtons ? (fetching ? spinner : syncButton) : emptyDiv}

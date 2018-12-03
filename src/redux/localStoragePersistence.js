@@ -43,6 +43,9 @@ export function load() {
         // User
         loadedState.user = jsState.user;
 
+        // Karma
+        loadedState.karma = jsState.karma;
+
         // Lists
         loadedState.lists = {};
         loadedState.lists.lists = Immutable.List(
