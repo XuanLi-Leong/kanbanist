@@ -23,13 +23,17 @@ class KarmaStreaks extends Component {
 
     makeStreakComponent = (current, max) => {
         return (
-            <ProgressBar
-                className="Karma-streak-bar pt-no-stripes pt-no-animation"
-                value={this.getValue(current, max)}
-                intent={this.getIntent(current, max)}
-                stripes={false}
-                animate={false}
-            />
+            <div>
+                <ProgressBar
+                    className="Karma-streak-bar pt-no-stripes pt-no-animation"
+                    value={this.getValue(current, max)}
+                    intent={this.getIntent(current, max)}
+                    stripes={false}
+                    animate={false}
+                />
+                <p>Current streak: {current}</p>
+                <p>Maximum streak: {max}</p>
+            </div>
         );
     };
 
@@ -44,10 +48,14 @@ class KarmaStreaks extends Component {
         );
         return (
             <div className="Karma-streaks Karma-card">
-                <h6>Daily Streak</h6>
-                {dailyStreakComponent}
-                <h6>Weekly Streak</h6>
-                {weeklyStreakComponent}
+                <div className="Karma-streak-section">
+                    <h6>Daily Streak</h6>
+                    {dailyStreakComponent}
+                </div>
+                <div className="Karma-streak-section">
+                    <h6>Weekly Streak</h6>
+                    {weeklyStreakComponent}
+                </div>
             </div>
         );
     }
