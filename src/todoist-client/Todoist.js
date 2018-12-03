@@ -66,8 +66,8 @@ export default class Todoist {
         return fetch(`${GET_STATS_URL}?token=${apiToken}`).then(res => res.json());
     }
 
-    static updateVacationMode(apiToken, vacationMode) {
-        return Todoist.sendCommand(apiToken, Todoist.createCommand('update_goals', vacationMode));
+    static updateKarmaGoals(apiToken, goals) {
+        return Todoist.sendCommand(apiToken, Todoist.createCommand('update_goals', goals));
     }
 
     static updateItem(apiToken, updatedItem) {
