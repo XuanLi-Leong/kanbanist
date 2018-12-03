@@ -57,6 +57,8 @@ export default class FilterMenu extends React.Component {
         const allSelected = checkboxItems.filter(el => !selectedItems.contains(el)).isEmpty();
 
         const projectsFilter = this.props.title === 'Projects Filter';
+        const filterPlaceholder = listsFilter ? 'Filter lists' : 'Filter projects';
+
         const filterCheckboxItems = memoize((checkboxItems, filterText) => {
             if (filterText === '') {
                 return checkboxItems;
@@ -78,7 +80,7 @@ export default class FilterMenu extends React.Component {
                             className="pt-input pt-round"
                             onChange={this.handleSearchChange}
                             type="search"
-                            placeholder="Filter tasks"
+                            placeholder={filterPlaceholder}
                             dir="auto"
                         />
                     </div>
