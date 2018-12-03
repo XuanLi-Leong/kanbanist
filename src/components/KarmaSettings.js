@@ -13,15 +13,20 @@ class KarmaSettings extends Component {
         };
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps, prevState) {
         let stateUpdater = {};
-        if (this.props.dailyGoal !== prevProps.dailyGoal) {
+        let update = false;
+        if (this.props.dailyGoal !== prevProps.dailyGoal && prevState.dailyGoal !== this.props.dailyGoal) {
             stateUpdater = { ...stateUpdater, dailyGoal: this.props.daily_goal };
+            update = true;
         }
-        if (this.props.weeklyGoal !== prevProps.weeklyGoal) {
+        if (this.props.weeklyGoal !== prevProps.weeklyGoal && prevState.weeklyGoal !== this.props.weeklyGoal) {
             stateUpdater = { ...stateUpdater, weeklyGoal: this.props.weekly_goal };
+            update = true;
         }
-        return stateUpdater;
+        if (update) {
+            this.setState(stateUpdater);
+        }
     }
 
     getTrend = () => {
@@ -68,10 +73,22 @@ class KarmaSettings extends Component {
         this.props.updateWeeklyGoal(goal);
     };
 
+    handleIgnoreDayClick = day => {
+        const idx = this.props.ignore_days.indexOf(day);
+        if (idx === -1) {
+            this.props.updateIgnoreDays([...this.props.ignore_days, day]);
+        } else {
+            this.props.updateIgnoreDays([
+                ...this.props.ignore_days.slice(0, idx),
+                ...this.props.ignore_days.slice(idx + 1),
+            ]);
+        }
+    };
+
     render() {
         const disableKarmaSwitch = (
             <div className="Karma-settings-item ">
-                {this.props.karma_disabled === 0 ? 'Karma is enabled' : 'Karma is disabled'}
+                <span>{this.props.karma_disabled === 0 ? 'Karma is enabled' : 'Karma is disabled'}</span>
                 <Switch
                     className="Karma-settings-switch pt-large pt-align-right"
                     checked={this.props.karma_disabled === 0}
@@ -81,7 +98,7 @@ class KarmaSettings extends Component {
         );
         const vacationModeSwitch = (
             <div className="Karma-settings-item">
-                Vacation mode is {this.props.karma_vacation === 0 ? 'off' : 'on'}
+                <span>Vacation mode is {this.props.karma_vacation === 0 ? 'off' : 'on'}</span>
                 <Switch
                     className="Karma-settings-switch pt-large pt-align-right"
                     checked={this.props.karma_vacation === 1}
@@ -91,7 +108,7 @@ class KarmaSettings extends Component {
         );
         const dailyGoalComponent = (
             <div className="Karma-settings-item">
-                Daily goal:
+                <span>Daily goal: </span>
                 <EditableText
                     className="Karma-settings-numeric"
                     value={this.state.dailyGoal}
@@ -109,7 +126,7 @@ class KarmaSettings extends Component {
         );
         const weeklyGoalComponent = (
             <div className="Karma-settings-item">
-                Weekly goal:
+                <span>Weekly goal: </span>
                 <EditableText
                     className="Karma-settings-numeric"
                     value={this.state.weeklyGoal}
@@ -125,7 +142,27 @@ class KarmaSettings extends Component {
                 />
             </div>
         );
-        const ignoreDaysComponent = this.props.ignore_days.map(num => <div key={num}>{num}</div>);
+        const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        const ignoreDaysComponent = (
+            <div className="Karma-settings-item">
+                <span>Ignore days: </span>
+                <div className="Karma-settings-ignore-days">
+                    {days.map((day, idx) => {
+                        return (
+                            <div
+                                key={day}
+                                className={
+                                    'Karma-settings-ignore-days-item' +
+                                    (this.props.ignore_days.indexOf(idx + 1) === -1 ? '' : '-active')
+                                }
+                                onClick={() => this.handleIgnoreDayClick(idx + 1)}>
+                                <div className="Karma-settings-ignore-days-item-content">{day}</div>
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+        );
 
         return (
             <div className="Karma-settings">
