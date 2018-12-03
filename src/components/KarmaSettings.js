@@ -1,4 +1,8 @@
-// Karma component in the header
+/*
+
+ Card segment that shows and allows users to modify karma settings
+
+ */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Switch, EditableText, AnchorButton, Icon, Intent } from '@blueprintjs/core';
@@ -14,6 +18,7 @@ class KarmaSettings extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
+        // Including this for the case where Todoist API does cleanup or reformatting of the goal number
         let stateUpdater = {};
         let update = false;
         if (this.props.dailyGoal !== prevProps.dailyGoal && prevState.dailyGoal !== this.props.dailyGoal) {
@@ -152,6 +157,7 @@ class KarmaSettings extends Component {
                             <div
                                 key={day}
                                 className={
+                                    // -active sets the div to be colored
                                     'Karma-settings-ignore-days-item' +
                                     (this.props.ignore_days.indexOf(idx + 1) === -1 ? '' : '-active')
                                 }

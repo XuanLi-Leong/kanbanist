@@ -1,16 +1,22 @@
-// Karma component in the header
+/*
+
+ Card segment that shows karma streaks
+
+ */
 import React, { Component } from 'react';
 import { Intent, ProgressBar } from '@blueprintjs/core';
 
 class KarmaStreaks extends Component {
     getValue = (current, max) => {
         if (current === 0) {
+            // When current streak is 0, still show a tiny percentage
             return max / 1000;
         } else {
             return current / max;
         }
     };
 
+    // Shows different color based on how well the user is doing
     getIntent = (current, max) => {
         if (current === 0) {
             return Intent.DANGER;
