@@ -22,7 +22,13 @@ https://github.com/mwakerman/kanbanist/issues/8
 
 ### Requirement 5: Testing
 
+_Expected: 2.5/2.5_
+
 ## Week 4
+
+Or show a board per project (that simply means filter to only show 1 project! DUH!) --- well this is already solved
+
+Ok ok ----- so it's like swimlanes. Each project is a swimlane. There we go.
 
 ### Requirement 1: Karma graph for items to reflect project color (stacked bar graph)
 
