@@ -90,11 +90,7 @@ const mapStateToProps = state => {
         days_items: state.karma.days_items,
         project_colors: state.karma.project_colors,
         projects: state.lists.projects,
-        week_items:
-            state.karma.week_items &&
-            state.karma.week_items.map(dataPoint => {
-                return [dataPoint.date, dataPoint.total_completed];
-            }),
+        week_items: state.karma.week_items,
         karma_disabled: state.karma.goals.karma_disabled,
         karma_vacation: state.karma.karma_vacation,
         weekly_goal: state.karma.goals.weekly_goal,

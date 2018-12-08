@@ -45,8 +45,8 @@ const hex2rgba = (hex, alpha = 1) => {
 }; // https://stackoverflow.com/a/51564734
 
 class KarmaCharts extends Component {
-    getDatasetForProject = (projectId, color_code, name) => {
-        const singleProjectDataPoints = this.props.days_items.reduce((acc, singleDayDataPoint) => {
+    getDatasetForProject = (dataset, projectId, color_code, name) => {
+        const singleProjectDataPoints = dataset.reduce((acc, singleDayDataPoint) => {
             const idx = singleDayDataPoint.items.findIndex(item => item.id === projectId);
             if (idx !== -1) {
                 return [...acc, [singleDayDataPoint.date, singleDayDataPoint.items[idx].completed]];
@@ -55,14 +55,21 @@ class KarmaCharts extends Component {
         }, []);
         return {
             name: name,
-            color: hex2rgba(color_mapping[color_code], 0.5),
+            // color: hex2rgba(color_mapping[color_code], 0.5),
             data: singleProjectDataPoints,
         };
     };
 
     transformDaysItems = () => {
         const data = this.props.projects.map(({ color: color_code, id: projectId, name }) =>
-            this.getDatasetForProject(projectId, color_code, name)
+            this.getDatasetForProject(this.props.days_items, projectId, color_code, name)
+        );
+        return data.filter(dataset => dataset.data.length > 0).toArray();
+    };
+
+    transformWeeksItems = () => {
+        const data = this.props.projects.map(({ color: color_code, id: projectId, name }) =>
+            this.getDatasetForProject(this.props.week_items, projectId, color_code, name)
         );
         return data.filter(dataset => dataset.data.length > 0).toArray();
     };
@@ -94,26 +101,44 @@ class KarmaCharts extends Component {
                 ytitle="Completed Items"
                 xtitle="Date"
                 messages={{ empty: 'No data' }}
-                stacked={true}
+                // stacked={true}
                 library={{
                     scales: {
-                        xAxes: [{ gridLines: { color: '#8A9BA8' } }],
-                        yAxes: [{ gridLines: { color: '#8A9BA8' } }],
+                        xAxes: [{ gridLines: { color: '#8A9BA8' }, stacked: true }],
+                        yAxes: [{ gridLines: { color: '#8A9BA8' }, stacked: true }],
+                    },
+                    borderColor: ['#000'],
+                    onClick: (event, element) => {
+                        if (element.length > 0) {
+                            var series = element[0]._model.datasetLabel;
+                            var label = element[0]._model.label;
+                            var value = this.transformDaysItems()[element[0]._datasetIndex].data[element[0]._index];
+                            console.log(series, label, value);
+                        }
                     },
                 }}
             />
         );
         const itemsPerWeek = (
-            <LineChart
-                data={this.props.week_items}
+            <ColumnChart
+                data={this.transformWeeksItems()}
                 ytitle="Completed Items"
-                xtitle="Date"
-                curve={false}
+                xtitle="Week"
                 messages={{ empty: 'No data' }}
+                // stacked={true}
                 library={{
                     scales: {
-                        xAxes: [{ gridLines: { color: '#8A9BA8' } }],
-                        yAxes: [{ gridLines: { color: '#8A9BA8' } }],
+                        xAxes: [{ gridLines: { color: '#8A9BA8' }, stacked: true }],
+                        yAxes: [{ gridLines: { color: '#8A9BA8' }, stacked: true }],
+                    },
+                    borderColor: ['#000'],
+                    onClick: (event, element) => {
+                        if (element.length > 0) {
+                            var series = element[0]._model.datasetLabel;
+                            var label = element[0]._model.label;
+                            var value = this.transformDaysItems()[element[0]._datasetIndex].data[element[0]._index];
+                            console.log(series, label, value);
+                        }
                     },
                 }}
             />
