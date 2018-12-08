@@ -16,12 +16,16 @@ const initialState = {
         weekly_goal: 0,
         daily_goal: 0,
         ignore_days: [],
+        current_daily_streak: { count: 0 },
+        max_daily_streak: { count: 0 },
+        current_weekly_streak: { count: 0 },
+        max_weekly_streak: { count: 0 },
     },
     karma: 0,
     karma_vacation: 0,
     karma_trend: 'up',
-    karma_graph_data: [],
-    days_items: [],
+    karma_graph_data: undefined,
+    days_items: undefined,
 };
 
 export const actions = {
