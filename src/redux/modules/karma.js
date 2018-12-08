@@ -26,6 +26,7 @@ const initialState = {
     karma_trend: 'up',
     karma_graph_data: undefined,
     days_items: undefined,
+    project_colors: {},
 };
 
 export const actions = {
@@ -41,8 +42,26 @@ export const actions = {
         const state = getState();
         Todoist.getStats(state.user.user.token)
             .then(response => {
-                const { karma_trend, karma_graph_data, days_items, week_items, goals, karma } = response;
-                dispatch(actions.fetchSuccess({ karma_trend, karma_graph_data, days_items, week_items, goals, karma }));
+                const {
+                    karma_trend,
+                    karma_graph_data,
+                    days_items,
+                    week_items,
+                    goals,
+                    karma,
+                    project_colors,
+                } = response;
+                dispatch(
+                    actions.fetchSuccess({
+                        karma_trend,
+                        karma_graph_data,
+                        days_items,
+                        week_items,
+                        goals,
+                        karma,
+                        project_colors,
+                    })
+                );
             })
             .catch(err => {
                 Raven.captureException(err);
@@ -76,6 +95,7 @@ export const reducer = (state = initialState, action) => {
                 karma_graph_data: action.payload.karma_graph_data,
                 days_items: action.payload.days_items,
                 week_items: action.payload.week_items,
+                project_colors: action.payload.project_colors,
             };
         case types.UPDATE_DAILY_GOAL:
             return {

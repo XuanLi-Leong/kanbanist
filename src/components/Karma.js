@@ -23,6 +23,8 @@ class Karma extends Component {
             karma_disabled,
             days_items,
             week_items,
+            projects,
+            project_colors,
             ignore_days,
             weekly_goal,
             daily_goal,
@@ -54,7 +56,13 @@ class Karma extends Component {
         );
 
         const karmaCharts = (
-            <KarmaCharts karma_graph_data={karma_graph_data} days_items={days_items} week_items={week_items} />
+            <KarmaCharts
+                karma_graph_data={karma_graph_data}
+                days_items={days_items}
+                week_items={week_items}
+                project_colors={project_colors}
+                projects={projects}
+            />
         );
 
         return (
@@ -79,11 +87,9 @@ const mapStateToProps = state => {
             state.karma.karma_graph_data.map(dataPoint => {
                 return [dataPoint.date, dataPoint.karma_avg];
             }),
-        days_items:
-            state.karma.days_items &&
-            state.karma.days_items.map(dataPoint => {
-                return [dataPoint.date, dataPoint.total_completed];
-            }),
+        days_items: state.karma.days_items,
+        project_colors: state.karma.project_colors,
+        projects: state.lists.projects,
         week_items:
             state.karma.week_items &&
             state.karma.week_items.map(dataPoint => {
