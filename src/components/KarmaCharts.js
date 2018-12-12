@@ -11,38 +11,9 @@
 import React, { Component } from 'react';
 import ReactChartkick, { LineChart, ColumnChart } from 'react-chartkick';
 import Chart from 'chart.js';
+import { color_mapping } from '../redux/modules/karma';
 
 ReactChartkick.addAdapter(Chart);
-
-const color_mapping = {
-    0: '#95ef63',
-    1: '#ff8581',
-    2: '#ffc471',
-    3: '#f9ec75',
-    4: '#a8c8e4',
-    5: '#d2b8a3',
-    6: '#e2a8e4',
-    7: '#cccccc',
-    8: '#fb886e',
-    9: '#ffcc00',
-    10: '#74e8d3',
-    11: '#3bd5fb',
-    12: '#dc4fad',
-    13: '#ac193d',
-    14: '#d24726',
-    15: '#82ba00',
-    16: '#03b3b2',
-    17: '#008299',
-    18: '#5db2ff',
-    19: '#0072c6',
-    20: '#000000',
-    21: '#777777',
-};
-
-const hex2rgba = (hex, alpha = 1) => {
-    const [r, g, b] = hex.match(/\w\w/g).map(x => parseInt(x, 16));
-    return `rgba(${r},${g},${b},${alpha})`;
-}; // https://stackoverflow.com/a/51564734
 
 class KarmaCharts extends Component {
     getDatasetForProject = (dataset, projectId, color_code, name) => {
@@ -55,7 +26,7 @@ class KarmaCharts extends Component {
         }, []);
         return {
             name: name,
-            // color: hex2rgba(color_mapping[color_code], 0.5),
+            color: color_mapping[color_code],
             data: singleProjectDataPoints,
         };
     };
