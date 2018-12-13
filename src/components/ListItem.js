@@ -285,7 +285,11 @@ class ListItem extends React.Component {
                                     content={priorityMenu}
                                     position={Position.BOTTOM}>
                                     <Tooltip content="Priority" position={Position.BOTTOM}>
-                                        <Icon className={`priority-${item.priority}`} iconName="flag" iconSize={16} />
+                                        <Icon
+                                            className={`priority-${this.state.priority}`}
+                                            iconName="flag"
+                                            iconSize={16}
+                                        />
                                     </Tooltip>
                                 </Popover>
                             </div>
