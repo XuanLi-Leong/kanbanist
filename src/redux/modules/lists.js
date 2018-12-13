@@ -100,8 +100,8 @@ export const actions = {
         dispatch(actions.fetchRequest());
         Todoist.fetch(state.user.user.token)
             .then(response => {
-                const { labels, items, projects, collaborators } = response;
-                dispatch(actions.fetchSuccess(labels, items, projects, collaborators));
+                const { labels, items, notes, projects, collaborators } = response;
+                dispatch(actions.fetchSuccess(labels, items, notes, projects, collaborators));
             })
             .catch(err => {
                 Raven.captureException(err);
@@ -110,9 +110,9 @@ export const actions = {
             });
     },
     fetchRequest: () => ({ type: types.FETCH_REQUEST_SENT }),
-    fetchSuccess: (labelList, items, projects, collaborators) => ({
+    fetchSuccess: (labelList, items, notes, projects, collaborators) => ({
         type: types.FETCH_SUCCESSFUL,
-        payload: { labelList, items, projects, collaborators },
+        payload: { labelList, items, notes, projects, collaborators },
     }),
     fetchFailure: error => ({ type: types.FETCH_FAILURE, payload: { error } }),
     clearAll: () => ({ type: types.CLEAR_ALL }),
@@ -400,7 +400,7 @@ function fetchRequest(state, action) {
 }
 
 function fetchSuccess(state, action) {
-    const { labelList, items, projects, collaborators } = action.payload;
+    const { labelList, items, notes, projects, collaborators } = action.payload;
 
     const projectIdMap = projects.reduce((mapping, project) => {
         mapping[project.id] = new Project(project);
@@ -460,6 +460,7 @@ function fetchSuccess(state, action) {
                 .map(item => new Item({ ...item, text: item.content, project: projectIdMap[item.project_id] }))
         ),
     });
+    // TODO add notes to their associated items as items.notes
 
     // Create projects and filtered projects
     const loadedProjects = ImmutableList(Object.keys(projectIdMap).map(pid => projectIdMap[pid]));

@@ -34,7 +34,7 @@ export default class Todoist {
 
     static fetch(apiToken) {
         return fetch(
-            `${SYNC_API_URL}?token=${apiToken}&sync_token=*&resource_types=["labels","items","projects","collaborators"]`
+            `${SYNC_API_URL}?token=${apiToken}&sync_token=*&resource_types=["labels","items","projects","collaborators","notes"]`
         )
             .then(res => res.json())
             .then(todoistData => {
@@ -50,6 +50,9 @@ export default class Todoist {
                 // Items
                 const items = todoistData['items'];
 
+                // Notes
+                const notes = todoistData['notes'];
+
                 // Projects
                 const projects = todoistData['projects'];
                 projects.sort((p1, p2) => p1.item_order - p2.item_order);
@@ -57,7 +60,7 @@ export default class Todoist {
                 // Colaborators
                 const collaborators = todoistData['collaborators'];
 
-                return { labels, items, projects, collaborators };
+                return { labels, items, notes, projects, collaborators };
             });
     }
 
