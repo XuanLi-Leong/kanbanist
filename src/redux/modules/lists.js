@@ -93,15 +93,15 @@ export const actions = {
     deleteList: list => ({ type: types.DELETE_LIST, payload: { list } }),
     addListItem: (list, item, onHidden) => ({ type: types.ADD_LIST_ITEM, payload: { list, item, onHidden } }),
     moveToList: (toList, item, fromList) => ({ type: types.MOVE_TO_LIST, payload: { toList, item, fromList } }),
-    updateListItem: (item, text) => ({ type: types.UPDATE_LIST_ITEM, payload: { item, text } }),
+    updateListItem: (item, text, priority) => ({ type: types.UPDATE_LIST_ITEM, payload: { item, text, priority } }),
     completeListItem: item => ({ type: types.COMPLETE_LIST_ITEM, payload: { item } }),
     fetchLists: () => (dispatch, getState) => {
         const state = getState();
         dispatch(actions.fetchRequest());
         Todoist.fetch(state.user.user.token)
             .then(response => {
-                const { labels, items, projects, collaborators } = response;
-                dispatch(actions.fetchSuccess(labels, items, projects, collaborators));
+                const { labels, items, notes, projects, collaborators } = response;
+                dispatch(actions.fetchSuccess(labels, items, notes, projects, collaborators));
             })
             .catch(err => {
                 Raven.captureException(err);
@@ -110,9 +110,9 @@ export const actions = {
             });
     },
     fetchRequest: () => ({ type: types.FETCH_REQUEST_SENT }),
-    fetchSuccess: (labelList, items, projects, collaborators) => ({
+    fetchSuccess: (labelList, items, notes, projects, collaborators) => ({
         type: types.FETCH_SUCCESSFUL,
-        payload: { labelList, items, projects, collaborators },
+        payload: { labelList, items, notes, projects, collaborators },
     }),
     fetchFailure: error => ({ type: types.FETCH_FAILURE, payload: { error } }),
     clearAll: () => ({ type: types.CLEAR_ALL }),
@@ -275,8 +275,8 @@ function moveToList(state, action) {
 }
 
 function updateListItem(state, action) {
-    const { item, text } = action.payload;
-    const updatedLists = state.lists.map(itemList => itemList.updateItem(item, item.updateWith({ text })));
+    const { item, text, priority } = action.payload;
+    const updatedLists = state.lists.map(itemList => itemList.updateItem(item, item.updateWith({ text, priority })));
     return { ...state, lists: updatedLists };
 }
 
@@ -400,7 +400,7 @@ function fetchRequest(state, action) {
 }
 
 function fetchSuccess(state, action) {
-    const { labelList, items, projects, collaborators } = action.payload;
+    const { labelList, items, notes, projects, collaborators } = action.payload;
 
     const projectIdMap = projects.reduce((mapping, project) => {
         mapping[project.id] = new Project(project);
@@ -426,7 +426,25 @@ function fetchSuccess(state, action) {
                             return !!project;
                         })
                         .filter(item => !item.checked)
-                        .map(item => new Item({ ...item, text: item.content, project: projectIdMap[item.project_id] }))
+                        .map(
+                            item =>
+                                new Item({
+                                    ...item,
+                                    text: item.content,
+                                    project: projectIdMap[item.project_id],
+                                    notes: ImmutableList(
+                                        notes
+                                            .filter(note => {
+                                                return (
+                                                    note.item_id === item.id &&
+                                                    note.is_deleted === 0 &&
+                                                    note.is_archived === 0
+                                                );
+                                            })
+                                            .sort((n1, n2) => n1.id - n2.id)
+                                    ),
+                                })
+                        )
                 ),
             });
         })
@@ -460,6 +478,7 @@ function fetchSuccess(state, action) {
                 .map(item => new Item({ ...item, text: item.content, project: projectIdMap[item.project_id] }))
         ),
     });
+    // TODO add notes to their associated items as items.notes
 
     // Create projects and filtered projects
     const loadedProjects = ImmutableList(Object.keys(projectIdMap).map(pid => projectIdMap[pid]));

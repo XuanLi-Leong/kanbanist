@@ -312,14 +312,46 @@ p {
   background: RGBA(251, 192, 63, 0.7) none;
 }
 
+ .ListItem .priority-4 input:disabled ~ .pt-control-indicator {
+  background: RGBA(170, 5, 15, 0.4) none;
+}
 
-.ListItem-inner-bottom {
+ .ListItem .priority-3 input:disabled ~ .pt-control-indicator {
+  background: RGBA(246, 128, 46, 0.4) none;
+}
+
+ .ListItem .priority-2 input:disabled ~ .pt-control-indicator {
+  background: RGBA(251, 192, 63, 0.4) none;
+}
+
+ .ListItem-priority-button .priority-4, .priority-4.pt-menu-item::before, .priority-4.pt-menu-item::after {
+  color: RGB(170, 5, 15);
+}
+
+ .ListItem-priority-button .priority-3, .priority-3.pt-menu-item::before, .priority-3.pt-menu-item::after {
+  color: RGB(246, 128, 46);
+}
+
+ .ListItem-priority-button .priority-2, .priority-2.pt-menu-item::before, .priority-2.pt-menu-item::after {
+  color: RGB(251, 192, 63);
+}
+
+.ListItem-comments, .ListItem-inner-bottom {
   padding-left: 22px;
   margin-top: 6px;
 }
 
 .ListItem-edit-button + .ListItem-edit-button {
   margin-left: 7px;
+}
+
+.ListItem-priority-button {
+  vertical-align: middle;
+  min-height: 30px;
+  line-height: 30px;
+  padding: 0 10px;
+  margin-left: auto;
+  color: #8A9BA8;
 }
 
 .ListItem-edit-buttons {
@@ -336,10 +368,21 @@ p {
 .ListItem-inner-bottom .non-edit-text {
   display: flex;
   align-items: center;
+  margin-left: 7px;
+}
+
+.ListItem-comments-icon {
+  color: #8A9BA8;
+  margin-right: 2px;
+}
+
+.ListItem-comments-count {
+  font-size: 11px;
+  color: #8A9BA8;
+  margin-right: 5px;
 }
 
 .ListItem-project-name {
-  margin-left: 7px;
   font-size: 11px;
   color: #8A9BA8;
   margin-right: auto;
