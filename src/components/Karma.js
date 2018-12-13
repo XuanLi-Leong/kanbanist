@@ -12,6 +12,7 @@ import Dimensions from 'react-dimensions';
 import KarmaSettings from '../components/KarmaSettings';
 import KarmaStreaks from '../components/KarmaStreaks';
 import KarmaCharts from '../components/KarmaCharts';
+import KarmaUpdateReasons from '../components/KarmaUpdateReasons';
 
 class Karma extends Component {
     render() {
@@ -23,6 +24,8 @@ class Karma extends Component {
             karma_disabled,
             days_items,
             week_items,
+            projects,
+            project_colors,
             ignore_days,
             weekly_goal,
             daily_goal,
@@ -30,6 +33,9 @@ class Karma extends Component {
             max_daily_streak,
             current_weekly_streak,
             max_weekly_streak,
+            karma_update_reasons,
+            gmt_string,
+            time_format,
         } = this.props;
 
         const karmaSettings = (
@@ -54,7 +60,23 @@ class Karma extends Component {
         );
 
         const karmaCharts = (
-            <KarmaCharts karma_graph_data={karma_graph_data} days_items={days_items} week_items={week_items} />
+            <KarmaCharts
+                karma_graph_data={karma_graph_data}
+                days_items={days_items}
+                week_items={week_items}
+                project_colors={project_colors}
+                projects={projects}
+                karma_update_reasons={karma_update_reasons}
+                gmt_string={gmt_string}
+            />
+        );
+
+        const karmaUpdateReasons = (
+            <KarmaUpdateReasons
+                time_format={time_format}
+                karma_update_reasons={karma_update_reasons}
+                gmt_string={gmt_string}
+            />
         );
 
         return (
@@ -64,7 +86,11 @@ class Karma extends Component {
                     <hr />
                     {karmaStreaks}
                 </div>
-                {karmaCharts}
+                <div className="Karma-card Karma-chart">
+                    {karmaUpdateReasons}
+                    <hr />
+                    {karmaCharts}
+                </div>
             </div>
         );
     }
@@ -79,16 +105,10 @@ const mapStateToProps = state => {
             state.karma.karma_graph_data.map(dataPoint => {
                 return [dataPoint.date, dataPoint.karma_avg];
             }),
-        days_items:
-            state.karma.days_items &&
-            state.karma.days_items.map(dataPoint => {
-                return [dataPoint.date, dataPoint.total_completed];
-            }),
-        week_items:
-            state.karma.week_items &&
-            state.karma.week_items.map(dataPoint => {
-                return [dataPoint.date, dataPoint.total_completed];
-            }),
+        days_items: state.karma.days_items,
+        project_colors: state.karma.project_colors,
+        projects: state.lists.projects,
+        week_items: state.karma.week_items,
         karma_disabled: state.karma.goals.karma_disabled,
         karma_vacation: state.karma.karma_vacation,
         weekly_goal: state.karma.goals.weekly_goal,
@@ -100,6 +120,9 @@ const mapStateToProps = state => {
         max_daily_streak: state.karma.goals.max_daily_streak,
         current_weekly_streak: state.karma.goals.current_weekly_streak,
         max_weekly_streak: state.karma.goals.max_weekly_streak,
+        karma_update_reasons: state.karma.karma_update_reasons,
+        gmt_string: state.user.user.tz_info.gmt_string,
+        time_format: state.user.user.time_format,
         // magic_num_reached: state.user.user.magic_num_reached, // bool -- goal number ? idk what this is
         // start_day: state.user.user.start_day, // first day of the week?
     };

@@ -10,18 +10,78 @@ export const types = {
     UPDATE_KARMA_DISABLED: 'UPDATE_KARMA_DISABLED',
 };
 
+export const karmaUpdateReasons = {
+    1: 'You added tasks',
+    2: 'You completed tasks',
+    3: 'Usage of advanced features',
+    4: 'You are using Todoist. Thanks!',
+    5: 'Signed up for Todoist Beta!',
+    6: 'Used Todoist Support section!',
+    7: 'For using Todoist Premium - thanks for supporting us!',
+    8: 'Getting Started Guide task completed!',
+    9: 'Daily Goal reached!',
+    10: 'Weekly Goal reached!',
+    50: 'You have tasks that are many days overdue', // over %s days overdue
+    52: 'Inactive for a longer period of time',
+};
+
+export const colorMapping = {
+    0: '#95ef63',
+    1: '#ff8581',
+    2: '#ffc471',
+    3: '#f9ec75',
+    4: '#a8c8e4',
+    5: '#d2b8a3',
+    6: '#e2a8e4',
+    7: '#cccccc',
+    8: '#fb886e',
+    9: '#ffcc00',
+    10: '#74e8d3',
+    11: '#3bd5fb',
+    12: '#dc4fad',
+    13: '#ac193d',
+    14: '#d24726',
+    15: '#82ba00',
+    16: '#03b3b2',
+    17: '#008299',
+    18: '#5db2ff',
+    19: '#0072c6',
+    20: '#000000',
+    21: '#777777',
+};
+
+export const hex2rgba = (hex, alpha = 1) => {
+    const [r, g, b] = hex.match(/\w\w/g).map(x => parseInt(x, 16));
+    return `rgba(${r},${g},${b},${alpha})`;
+}; // https://stackoverflow.com/a/51564734
+
 const initialState = {
     goals: {
         karma_disabled: 0,
         weekly_goal: 0,
         daily_goal: 0,
         ignore_days: [],
+        current_daily_streak: { count: 0 },
+        max_daily_streak: { count: 0 },
+        current_weekly_streak: { count: 0 },
+        max_weekly_streak: { count: 0 },
     },
     karma: 0,
     karma_vacation: 0,
     karma_trend: 'up',
-    karma_graph_data: [],
-    days_items: [],
+    karma_graph_data: undefined,
+    days_items: undefined,
+    project_colors: {},
+    karma_update_reasons: [
+        // {
+        //     positive_karma_reasons: [],
+        //     new_karma: 0,
+        //     negative_karma: 0,
+        //     positive_karma: 0,
+        //     negative_karma_reasons: [],
+        //     time: '', // in GMT
+        // },
+    ],
 };
 
 export const actions = {
@@ -37,8 +97,28 @@ export const actions = {
         const state = getState();
         Todoist.getStats(state.user.user.token)
             .then(response => {
-                const { karma_trend, karma_graph_data, days_items, week_items, goals, karma } = response;
-                dispatch(actions.fetchSuccess({ karma_trend, karma_graph_data, days_items, week_items, goals, karma }));
+                const {
+                    karma_trend,
+                    karma_graph_data,
+                    days_items,
+                    week_items,
+                    goals,
+                    karma,
+                    project_colors,
+                    karma_update_reasons,
+                } = response;
+                dispatch(
+                    actions.fetchSuccess({
+                        karma_trend,
+                        karma_graph_data,
+                        days_items,
+                        week_items,
+                        goals,
+                        karma,
+                        project_colors,
+                        karma_update_reasons,
+                    })
+                );
             })
             .catch(err => {
                 Raven.captureException(err);
@@ -72,6 +152,10 @@ export const reducer = (state = initialState, action) => {
                 karma_graph_data: action.payload.karma_graph_data,
                 days_items: action.payload.days_items,
                 week_items: action.payload.week_items,
+                project_colors: action.payload.project_colors,
+                karma_update_reasons: action.payload.karma_update_reasons.filter(
+                    el => el.positive_karma_reasons.length + el.negative_karma_reasons.length > 0
+                ), // sometimes the API returns an update object with no change in karma and no reasons
             };
         case types.UPDATE_DAILY_GOAL:
             return {
