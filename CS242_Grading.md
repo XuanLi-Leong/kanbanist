@@ -34,8 +34,15 @@ _Expected: 2.5/2.5_
 
 _Expected: 2.5/2.5_
 
-### Requirement 3: Display item priority
+### Requirement 3: Display comments w task on a card
+
+https://github.com/mwakerman/kanbanist/issues/26
+_Expected: 2.5/2.5_
 
 ### Requirement 4: Sync / Modify item priority
 
+_Expected: 2.5/2.5_
+
 ### Requirement 5: Testing
+
+_Expected: 2.5/2.5_
