@@ -10,8 +10,6 @@ export const types = {
     UPDATE_KARMA_DISABLED: 'UPDATE_KARMA_DISABLED',
 };
 
-export const projectColors = {};
-
 export const karmaUpdateReasons = {
     1: 'You added tasks',
     2: 'You completed tasks',
@@ -27,7 +25,7 @@ export const karmaUpdateReasons = {
     52: 'Inactive for a longer period of time',
 };
 
-export const color_mapping = {
+export const colorMapping = {
     0: '#95ef63',
     1: '#ff8581',
     2: '#ffc471',
@@ -155,7 +153,9 @@ export const reducer = (state = initialState, action) => {
                 days_items: action.payload.days_items,
                 week_items: action.payload.week_items,
                 project_colors: action.payload.project_colors,
-                karma_update_reasons: action.payload.karma_update_reasons,
+                karma_update_reasons: action.payload.karma_update_reasons.filter(
+                    el => el.positive_karma_reasons.length + el.negative_karma_reasons.length > 0
+                ), // sometimes the API returns an update object with no change in karma and no reasons
             };
         case types.UPDATE_DAILY_GOAL:
             return {

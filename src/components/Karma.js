@@ -12,6 +12,7 @@ import Dimensions from 'react-dimensions';
 import KarmaSettings from '../components/KarmaSettings';
 import KarmaStreaks from '../components/KarmaStreaks';
 import KarmaCharts from '../components/KarmaCharts';
+import KarmaUpdateReasons from '../components/KarmaUpdateReasons';
 
 class Karma extends Component {
     render() {
@@ -32,6 +33,9 @@ class Karma extends Component {
             max_daily_streak,
             current_weekly_streak,
             max_weekly_streak,
+            karma_update_reasons,
+            gmt_string,
+            time_format,
         } = this.props;
 
         const karmaSettings = (
@@ -62,6 +66,16 @@ class Karma extends Component {
                 week_items={week_items}
                 project_colors={project_colors}
                 projects={projects}
+                karma_update_reasons={karma_update_reasons}
+                gmt_string={gmt_string}
+            />
+        );
+
+        const karmaUpdateReasons = (
+            <KarmaUpdateReasons
+                time_format={time_format}
+                karma_update_reasons={karma_update_reasons}
+                gmt_string={gmt_string}
             />
         );
 
@@ -72,7 +86,11 @@ class Karma extends Component {
                     <hr />
                     {karmaStreaks}
                 </div>
-                {karmaCharts}
+                <div className="Karma-card Karma-chart">
+                    {karmaUpdateReasons}
+                    <hr />
+                    {karmaCharts}
+                </div>
             </div>
         );
     }
@@ -102,6 +120,9 @@ const mapStateToProps = state => {
         max_daily_streak: state.karma.goals.max_daily_streak,
         current_weekly_streak: state.karma.goals.current_weekly_streak,
         max_weekly_streak: state.karma.goals.max_weekly_streak,
+        karma_update_reasons: state.karma.karma_update_reasons,
+        gmt_string: state.user.user.tz_info.gmt_string,
+        time_format: state.user.user.time_format,
         // magic_num_reached: state.user.user.magic_num_reached, // bool -- goal number ? idk what this is
         // start_day: state.user.user.start_day, // first day of the week?
     };

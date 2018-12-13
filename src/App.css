@@ -424,6 +424,10 @@ p {
   border-radius: 3px;
 }
 
+.Karma-update-tag {
+   margin-right: 6px;
+}
+
 .Karma-card + .Karma-card {
   margin-left: 15px;
 }
@@ -446,7 +450,7 @@ p {
   flex-basis: 255px;
 }
 
-.Karma-settings-item {
+.Karma-update-item, .Karma-settings-item {
   background-color: rgba(138, 155, 168, 0.2);
   border-radius: 3px;
   padding: 10px;

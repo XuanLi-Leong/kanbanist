@@ -11,11 +11,39 @@
 import React, { Component } from 'react';
 import ReactChartkick, { LineChart, ColumnChart } from 'react-chartkick';
 import Chart from 'chart.js';
-import { color_mapping } from '../redux/modules/karma';
+import { colorMapping, karmaUpdateReasons } from '../redux/modules/karma';
 
 ReactChartkick.addAdapter(Chart);
+const moment = require('moment');
 
 class KarmaCharts extends Component {
+    getReasonsFooter = targetMoment => {
+        const { karma_update_reasons, gmt_string } = this.props;
+        let positiveReasons = [];
+        let negativeReasons = [];
+        karma_update_reasons
+            .filter(el => {
+                const updateMoment = moment(el.time).utcOffset(gmt_string);
+                return updateMoment.isSame(targetMoment, 'day');
+            })
+            .forEach(updateObject => {
+                const { positive_karma, negative_karma, positive_karma_reasons, negative_karma_reasons } = updateObject;
+
+                if (positive_karma_reasons.length > 0) {
+                    // Update positive
+                    const positiveReasonsString = positive_karma_reasons.map(num => karmaUpdateReasons[num]).join(); // default is ', '. consider using '\n'
+                    positiveReasons.push(`${positiveReasonsString} ( +${positive_karma} )`);
+                }
+
+                if (negative_karma_reasons.length > 0) {
+                    // Update negative
+                    const negativeReasonsString = negative_karma_reasons.map(num => karmaUpdateReasons[num]).join(); // default is ', '. consider using '\n'
+                    negativeReasons.push(`${negativeReasonsString} ( -${negative_karma} )`);
+                }
+            });
+        return positiveReasons.concat(negativeReasons).join('\n');
+    };
+
     getDatasetForProject = (dataset, projectId, color_code, name) => {
         const singleProjectDataPoints = dataset.reduce((acc, singleDayDataPoint) => {
             const idx = singleDayDataPoint.items.findIndex(item => item.id === projectId);
@@ -26,7 +54,7 @@ class KarmaCharts extends Component {
         }, []);
         return {
             name: name,
-            color: color_mapping[color_code],
+            color: colorMapping[color_code],
             data: singleProjectDataPoints,
         };
     };
@@ -62,6 +90,17 @@ class KarmaCharts extends Component {
                     tooltips: {
                         mode: 'index',
                         intersect: false,
+                        callbacks: {
+                            footer: (tooltipItems, data) => {
+                                let footer = '';
+
+                                tooltipItems.forEach(tooltipItem => {
+                                    let targetMoment = moment(data.labels[tooltipItem.index]);
+                                    footer += this.getReasonsFooter(targetMoment);
+                                });
+                                return footer;
+                            },
+                        },
                     },
                 }}
             />
@@ -78,7 +117,6 @@ class KarmaCharts extends Component {
                         xAxes: [{ gridLines: { color: '#8A9BA8' }, stacked: true }],
                         yAxes: [{ gridLines: { color: '#8A9BA8' }, stacked: true }],
                     },
-                    borderColor: ['#000'],
                     onClick: (event, element) => {
                         if (element.length > 0) {
                             var series = element[0]._model.datasetLabel;
@@ -102,21 +140,12 @@ class KarmaCharts extends Component {
                         xAxes: [{ gridLines: { color: '#8A9BA8' }, stacked: true }],
                         yAxes: [{ gridLines: { color: '#8A9BA8' }, stacked: true }],
                     },
-                    borderColor: ['#000'],
-                    onClick: (event, element) => {
-                        if (element.length > 0) {
-                            var series = element[0]._model.datasetLabel;
-                            var label = element[0]._model.label;
-                            var value = this.transformDaysItems()[element[0]._datasetIndex].data[element[0]._index];
-                            console.log(series, label, value);
-                        }
-                    },
                 }}
             />
         );
 
         return (
-            <div className="Karma-chart Karma-card">
+            <div>
                 <h6>Karma Over Time</h6>
                 {karmaOverTime}
                 <hr />
