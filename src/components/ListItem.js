@@ -1,5 +1,16 @@
 import React from 'react';
-import { EditableText, Button, Checkbox, Icon, Intent } from '@blueprintjs/core';
+import {
+    EditableText,
+    Button,
+    Checkbox,
+    Icon,
+    Intent,
+    Menu,
+    MenuItem,
+    Tooltip,
+    Popover,
+    Position,
+} from '@blueprintjs/core';
 import '../../node_modules/@blueprintjs/core/dist/blueprint.css';
 import { DragSource } from 'react-dnd';
 import { DragAndDropTypes } from './Constants';
@@ -36,6 +47,8 @@ class ListItem extends React.Component {
             rawText: props.item.text,
             formattedText: this.format(props.item.text),
             checked: props.checked,
+            previousPriority: props.item.previousPriority, // TODO: I don't think we need this. Just grab from prop
+            priority: props.item.priority,
         };
     }
 
@@ -123,23 +136,58 @@ class ListItem extends React.Component {
             rawText: this.state.previousRawText,
             isEditing: false,
             isActuallyEditing: false,
+            priority: this.state.previousPriority,
         });
+    };
+
+    renderPriorityMenu = () => {
+        return (
+            <Menu>
+                <MenuItem iconName="flag" onClick={() => this.handlePriorityClick(1)} text="Priority 4" />
+                <MenuItem
+                    className="priority-2"
+                    color="RGB(251, 192, 63)"
+                    iconName="flag"
+                    onClick={() => this.handlePriorityClick(2)}
+                    text="Priority 3"
+                />
+                <MenuItem
+                    className="priority-3"
+                    color="RGB(246, 128, 46)"
+                    iconName="flag"
+                    onClick={() => this.handlePriorityClick(3)}
+                    text="Priority 2"
+                />
+                <MenuItem
+                    className="priority-4"
+                    color="RGB(170, 5, 15)"
+                    iconName="flag"
+                    onClick={() => this.handlePriorityClick(4)}
+                    text="Priority 1"
+                />
+            </Menu>
+        );
+    };
+
+    handlePriorityClick = priority => {
+        this.setState({ priority });
     };
 
     updateItem = () => {
         const { item, onUpdate } = this.props;
-        const { rawText } = this.state;
+        const { rawText, priority } = this.state;
         // Only update if the value actually changed. Note that this may
         // need to be changed if we allow for changing other properties of
         // a task (like the project) in the future.
-        if (item.text !== rawText) {
-            onUpdate(item, rawText);
+        if (item.text !== rawText || item.priority !== priority) {
+            onUpdate(item, rawText, priority);
         }
         this.setState({
             previousRawText: rawText,
             isEditing: false,
             isActuallyEditing: false,
             formattedText: this.format(rawText),
+            previousPriority: priority,
         });
     };
 
@@ -180,6 +228,8 @@ class ListItem extends React.Component {
 
         const isRecurring = item.date_string ? item.date_string.search(/every/i) >= 0 : false;
         const classes = `ListItem pt-card pt-interactive pt-elevation-2 color-${item.project.color}`;
+
+        const priorityMenu = this.renderPriorityMenu();
 
         return connectDragSource(
             <div style={dynamicStyle} id={item.id} className={classes}>
@@ -225,6 +275,14 @@ class ListItem extends React.Component {
                                     onClick={this.updateItem}
                                 />
                                 <Button className="ListItem-edit-button" text="Cancel" onClick={this.handleCancel} />
+                                <Popover
+                                    className="ListItem-priority-button"
+                                    content={priorityMenu}
+                                    position={Position.BOTTOM}>
+                                    <Tooltip content="Priority" position={Position.BOTTOM}>
+                                        <Icon iconName="flag" iconSize={16} />
+                                    </Tooltip>
+                                </Popover>
                             </div>
                         ) : (
                             <div className="non-edit-text">

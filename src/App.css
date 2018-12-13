@@ -312,6 +312,29 @@ p {
   background: RGBA(251, 192, 63, 0.7) none;
 }
 
+ .ListItem .priority-4 input:disabled ~ .pt-control-indicator {
+  background: RGBA(170, 5, 15, 0.4) none;
+}
+
+ .ListItem .priority-3 input:disabled ~ .pt-control-indicator {
+  background: RGBA(246, 128, 46, 0.4) none;
+}
+
+ .ListItem .priority-2 input:disabled ~ .pt-control-indicator {
+  background: RGBA(251, 192, 63, 0.4) none;
+}
+
+ .priority-4.pt-menu-item::before, .priority-4.pt-menu-item::after {
+  color: RGB(170, 5, 15);
+}
+
+ .priority-3.pt-menu-item::before, .priority-3.pt-menu-item::after {
+  color: RGB(246, 128, 46);
+}
+
+ .priority-2.pt-menu-item::before, .priority-2.pt-menu-item::after {
+  color: RGB(251, 192, 63);
+}
 
 .ListItem-inner-bottom {
   padding-left: 22px;
@@ -320,6 +343,14 @@ p {
 
 .ListItem-edit-button + .ListItem-edit-button {
   margin-left: 7px;
+}
+
+.ListItem-priority-button {
+  vertical-align: middle;
+  min-height: 30px;
+  line-height: 30px;
+  padding: 0 10px;
+  margin-left: auto;
 }
 
 .ListItem-edit-buttons {
