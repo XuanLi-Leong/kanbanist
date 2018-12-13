@@ -49,6 +49,7 @@ class ListItem extends React.Component {
             checked: props.checked,
             previousPriority: props.item.previousPriority, // TODO: I don't think we need this. Just grab from prop
             priority: props.item.priority,
+            showComments: false,
         };
     }
 
@@ -173,6 +174,10 @@ class ListItem extends React.Component {
         this.setState({ priority });
     };
 
+    handleCommentsClick = () => {
+        this.setState({ showComments: !this.state.showComments });
+    };
+
     updateItem = () => {
         const { item, onUpdate } = this.props;
         const { rawText, priority } = this.state;
@@ -213,7 +218,7 @@ class ListItem extends React.Component {
 
     render() {
         const { connectDragSource, isDragging, item, collaborator } = this.props;
-        const { checked, rawText, formattedText, isEditing, isActuallyEditing } = this.state;
+        const { checked, rawText, formattedText, isEditing, isActuallyEditing, showComments } = this.state;
 
         const isOutlook = isOutlookText(rawText);
 
@@ -280,12 +285,18 @@ class ListItem extends React.Component {
                                     content={priorityMenu}
                                     position={Position.BOTTOM}>
                                     <Tooltip content="Priority" position={Position.BOTTOM}>
-                                        <Icon iconName="flag" iconSize={16} />
+                                        <Icon className={`priority-${item.priority}`} iconName="flag" iconSize={16} />
                                     </Tooltip>
                                 </Popover>
                             </div>
                         ) : (
                             <div className="non-edit-text">
+                                {item.notes.size > 0 && (
+                                    <div onClick={this.handleCommentsClick}>
+                                        <Icon className="ListItem-comments-icon" iconName="chat" iconSize={16} />
+                                        <span className="ListItem-comments-count">{item.notes.size}</span>
+                                    </div>
+                                )}
                                 <span className="ListItem-project-name">{item.project.name}</span>
                                 {isRecurring ? (
                                     <Icon className="ListItem-recurring-icon" iconName="exchange" iconSize={16} />
@@ -313,6 +324,18 @@ class ListItem extends React.Component {
                             </div>
                         )}
                     </div>
+                    {showComments && (
+                        <div className="ListItem-comments">
+                            {item.notes.map(note => {
+                                return (
+                                    <div key={note.id} className="ListItem-comment-body">
+                                        {note.content}
+                                        <hr />
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    )}
                 </div>
                 <ReactTooltip place="bottom" effect="solid" />
             </div>

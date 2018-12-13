@@ -1,4 +1,4 @@
-import { Record } from 'immutable';
+import { Record, List as ImmutableList } from 'immutable';
 
 const ItemRecord = Record({
     id: 0,
@@ -10,10 +10,13 @@ const ItemRecord = Record({
     responsible_uid: null,
     date_added: '',
     date_string: '',
+    notes: ImmutableList.of(),
 });
 
 export default class Item extends ItemRecord {
     updateWith({ id, text, item_order, project, due_date_utc, priority, responsible_uid, date_added, date_string }) {
+        // updateWith does not support settings notes because it depends on
+        // how the Todoist API handles notes
         return new Item({
             id: id || this.id,
             text: text || this.text,

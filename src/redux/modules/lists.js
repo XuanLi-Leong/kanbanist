@@ -426,7 +426,25 @@ function fetchSuccess(state, action) {
                             return !!project;
                         })
                         .filter(item => !item.checked)
-                        .map(item => new Item({ ...item, text: item.content, project: projectIdMap[item.project_id] }))
+                        .map(
+                            item =>
+                                new Item({
+                                    ...item,
+                                    text: item.content,
+                                    project: projectIdMap[item.project_id],
+                                    notes: ImmutableList(
+                                        notes
+                                            .filter(note => {
+                                                return (
+                                                    note.item_id === item.id &&
+                                                    note.is_deleted === 0 &&
+                                                    note.is_archived === 0
+                                                );
+                                            })
+                                            .sort((n1, n2) => n1.id - n2.id)
+                                    ),
+                                })
+                        )
                 ),
             });
         })
